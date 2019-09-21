@@ -14,6 +14,7 @@ class AppColors {
   AppColors._(); // this basically makes it so you can instantiate this class
   static const Color sand = Color(0xFFfad596);
   static const Color fire = Color(0xFFeb7b6a);
+  static const Color intenseFire = Color(0xFFb63e2b);
   // static const Color secondaryFire = fire.withGreen(140);
 }
 

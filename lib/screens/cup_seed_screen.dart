@@ -22,19 +22,35 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   List shuffledPlayers = List();
   Map<String, List<String>> seededPlayers;
   bool showPlayers = false;
+  bool startCup = false;
 
-  _showReportDialog(players) {
+  _showReportDialog(List<PlayerBio> players) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
+          int playersLen = players.length;
+          bool longList = playersLen > 8;
           return Container(
+            // color: Colors.blue,
+            height: longList ? 400 : 320,
             child: AlertDialog(
-              title: Text("Report Video"),
+              title: Text(
+                "Available Slammers :",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppTheme.AppColors.intenseFire,
+                  fontFamily: AppTheme.FontFamilies.regular,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500
+                  ),
+                ),
               content: Container(
                 alignment: Alignment.center,
                 // color: Colors.blue,
+                height: longList ? 400 : 300,
                 child: PlayerSelector(
                   players: players,
+                  selectedPlayers: selectedPlayers,
                   onSelectionChanged: (selectedList) {
                     final List<String> convertPlayerList =
                         selectedList.map((item) {
@@ -47,13 +63,16 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                     setState(() {
                       selectedPlayers = selectedList;
                       shuffledPlayers = convertPlayerList;
+                      
+                      startCup = false;
+                      showPlayers = true;
                     });
                   },
                 ),
               ),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Choose "),
+                  child: Text("Done" , style: TextStyle(color: Colors.black),),
                   onPressed: () => Navigator.of(context).pop(),
                 )
               ],
@@ -84,14 +103,37 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (shuffledPlayers.length > 0) {
+      int playersLen = shuffledPlayers.length;
+
+      shuffledPlayers.map((item) => {
+            print(playersLen),
+            print('playersLen'),
+          });
+    }
+
     return Scaffold(
       appBar: GradientAppBar(
-          title: Text('Cup Mode'), gradient: AppTheme.AppBarColor.linear),
+          title: Text(
+            'Slammer\'s Cup',
+            style: TextStyle(
+                fontFamily: AppTheme.FontFamilies.regular,
+                fontWeight: FontWeight.w600,
+                fontSize: 27),
+          ),
+          gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
         alignment: Alignment.topCenter,
-        // margin: EdgeInsets.only(top: 35),
+        margin: EdgeInsets.only(top: 35),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              // colorFilter: ColorFilter.mode(Colors.blueGrey, BlendMode.screen),
+              image: AssetImage("assets/images/table_tennis.jpg"),
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.bottomRight),
+        ),
         child: ScopedModelDescendant<PlayerBioModel>(
           builder: (context, child, model) {
             final List<PlayerBio> players = model.playerBio;
@@ -112,7 +154,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                         elevation: 0,
                         highlightElevation: 0,
                         color: Colors.transparent,
-                        splashColor: Colors.amber,
+                        splashColor: AppTheme.AppColors.fire.withGreen(160),
                         // focusColor: Colors.red,
                         highlightColor: Colors.transparent,
                         onPressed: () => _showReportDialog(players),
@@ -121,40 +163,57 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                'Choose \n Slammers',
+                                'Choose Slammers',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontFamily: AppTheme.FontFamilies.slightlyCurvy,
+                                  fontFamily: AppTheme.FontFamilies.curvy,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 20,
+                                  fontSize: 22,
                                 ),
                               ),
                               IconButton(
+                                color: AppTheme.AppColors.fire.withGreen(160),
+                                splashColor: AppTheme.AppColors.fire.withGreen(160),
+
+                                iconSize: 34,
                                 icon: Icon(Icons.group_add),
-                                onPressed: () => _showReportDialog(players),
+                                onPressed: () => {_showReportDialog(players)},
                               ),
                             ]),
                       ),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.33,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Shuffle \n Slammers",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: AppTheme.FontFamilies.slightlyCurvy,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
+                      child: RaisedButton(
+                        elevation: 0,
+                        highlightElevation: 0,
+                        color: Colors.transparent,
+                        splashColor: AppTheme.AppColors.fire,
+                        // focusColor: Colors.red,
+                        highlightColor: Colors.transparent,
+                        onPressed: () => shuffle(shuffledPlayers),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Shuffle Slammers",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: AppTheme.FontFamilies.curvy,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 22,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.autorenew),
-                            onPressed: () => shuffle(shuffledPlayers),
-                          ),
-                        ],
+                            IconButton(
+                              color: AppTheme.AppColors.fire,
+                              iconSize: 32,
+                              splashColor: AppTheme.AppColors.fire,
+                              
+                              icon: Icon(Icons.autorenew),
+                              onPressed: () => shuffle(shuffledPlayers),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -162,22 +221,25 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                       child: Column(
                         children: <Widget>[
                           Text(
-                            "Start \n Slammin\'",
+                            "Start Slammin\'",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: AppTheme.FontFamilies.slightlyCurvy,
+                              fontFamily: AppTheme.FontFamilies.curvy,
                               fontWeight: FontWeight.w500,
                               fontSize: 22,
                             ),
                           ),
                           IconButton(
+                            color: AppTheme.AppColors.intenseFire,
+                            iconSize: 32,
                             alignment: Alignment.center,
                             icon: Icon(Icons.done_all),
-                            onPressed: (){
+                            onPressed: () {
                               final newPlayes = cupDraw(shuffledPlayers);
                               setState(() {
                                 seededPlayers = newPlayes;
-                                showPlayers = true;
+                                showPlayers = false;
+                                startCup = true;
                               });
                             },
                           ),
@@ -186,18 +248,24 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                     )
                   ],
                 ),
-                Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: Text(
-                      shuffledPlayers.join('\n'),
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.left,
-                    )),
                 if (showPlayers)
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: CupMatchScreen(seededPlayers),
+                      // padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 35),
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      child: Text(
+                        shuffledPlayers.join('\n'),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontFamily: AppTheme.FontFamilies.regular,
+                        ),
+                        textAlign: TextAlign.left,
+                      )),
+                if (startCup)
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    child: CupMatchScreen(seededPlayers),
                   ),
               ],
             );

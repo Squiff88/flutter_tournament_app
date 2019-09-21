@@ -60,11 +60,10 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             'Slammers Standings',
             style: TextStyle(
-              fontFamily: AppTheme.FontFamilies.regular,
-              fontWeight: FontWeight.w600,
-              fontSize: 27
-              ),
-            ),
+                fontFamily: AppTheme.FontFamilies.regular,
+                fontWeight: FontWeight.w600,
+                fontSize: 27),
+          ),
           gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
