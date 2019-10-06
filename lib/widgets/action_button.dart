@@ -61,7 +61,7 @@ class _ActionButtonState extends State<ActionButton> {
                 context,
                 PageTransition(
                     type: PageTransitionType.rightToLeftWithFade,
-                    child: CupSeedScreen(),
+                    child: CupSeedScreen([]),
                     curve: Curves.fastOutSlowIn)
               );
           },

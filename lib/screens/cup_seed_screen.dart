@@ -13,6 +13,14 @@ import '../widgets/action_button.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class CupSeedScreen extends StatefulWidget {
+  // should expect list of next round players
+  // if there is a list of next round playets pass them
+  // to shuffle func and cupdraw instead of shuffledPlayers
+
+  List nextPhasePlayers = List();
+
+  CupSeedScreen(this.nextPhasePlayers);
+
   @override
   _CupSeedScreenState createState() => _CupSeedScreenState();
 }
@@ -23,6 +31,21 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   Map<String, List<String>> seededPlayers;
   bool showPlayers = false;
   bool startCup = false;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    print('UPDATE DePendenciq.............. SEEEDED');
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(CupSeedScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    print('UPDATED..............');
+    super.didUpdateWidget(oldWidget);
+  }
 
   _showReportDialog(List<PlayerBio> players) {
     showDialog(
@@ -38,12 +61,11 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                 "Available Slammers :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppTheme.AppColors.intenseFire,
-                  fontFamily: AppTheme.FontFamilies.regular,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500
-                  ),
-                ),
+                    color: AppTheme.AppColors.intenseFire,
+                    fontFamily: AppTheme.FontFamilies.regular,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500),
+              ),
               content: Container(
                 alignment: Alignment.center,
                 // color: Colors.blue,
@@ -63,7 +85,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                     setState(() {
                       selectedPlayers = selectedList;
                       shuffledPlayers = convertPlayerList;
-                      
+
                       startCup = false;
                       showPlayers = true;
                     });
@@ -72,7 +94,10 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
               ),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Done" , style: TextStyle(color: Colors.black),),
+                  child: Text(
+                    "Done",
+                    style: TextStyle(color: Colors.black),
+                  ),
                   onPressed: () => Navigator.of(context).pop(),
                 )
               ],
@@ -101,16 +126,29 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
     return items;
   }
 
+
+  void nextRound(players){
+
+    var seedPlayer1 = cupDraw(players);
+    print(seedPlayer1);
+    print('seedPlayer');
+    setState(() {
+      seededPlayers = seedPlayer1;
+      showPlayers = false;
+      startCup = true;
+    });
+
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     if (shuffledPlayers.length > 0) {
       int playersLen = shuffledPlayers.length;
-
-      shuffledPlayers.map((item) => {
-            print(playersLen),
-            print('playersLen'),
-          });
     }
+
 
     return Scaffold(
       appBar: GradientAppBar(
@@ -173,8 +211,8 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                               ),
                               IconButton(
                                 color: AppTheme.AppColors.fire.withGreen(160),
-                                splashColor: AppTheme.AppColors.fire.withGreen(160),
-
+                                splashColor:
+                                    AppTheme.AppColors.fire.withGreen(160),
                                 iconSize: 34,
                                 icon: Icon(Icons.group_add),
                                 onPressed: () => {_showReportDialog(players)},
@@ -206,9 +244,10 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             ),
                             IconButton(
                               color: AppTheme.AppColors.fire,
+                              // padding: EdgeInsets.only(bottom: 40),
                               iconSize: 32,
                               splashColor: AppTheme.AppColors.fire,
-                              
+
                               icon: Icon(Icons.autorenew),
                               onPressed: () => shuffle(shuffledPlayers),
                             ),
@@ -235,6 +274,8 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             alignment: Alignment.center,
                             icon: Icon(Icons.done_all),
                             onPressed: () {
+                              // print(shuffledPlayers);
+                              // print('shuffledPlayers');
                               final newPlayes = cupDraw(shuffledPlayers);
                               setState(() {
                                 seededPlayers = newPlayes;
@@ -264,8 +305,9 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                       )),
                 if (startCup)
                   Container(
+                    margin: EdgeInsets.only(top: 30),
                     height: MediaQuery.of(context).size.height * 0.3,
-                    child: CupMatchScreen(seededPlayers),
+                    child: CupMatchScreen(cupPlayers: seededPlayers , invokeNextRound: nextRound,),
                   ),
               ],
             );

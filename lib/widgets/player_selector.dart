@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_app/models/player_bio.dart';
-import 'dart:math';
 
 import '../theme/theme.dart' as AppTheme;
 
@@ -22,8 +21,6 @@ class _PlayerSelectorState extends State<PlayerSelector> {
   _buildChoiceList() {
     List<Widget> choices = List();
     widget.players.forEach((item) {
-      final rng = new Random();
-      final randomMargin = rng.nextInt(38 - 1);
 
       final String playerName = item.name;
       final String firstName = playerName.split(' ')[0].split('')[0];
@@ -37,33 +34,52 @@ class _PlayerSelectorState extends State<PlayerSelector> {
         return arr.containsValue(item.name);
       }).toString();
 
-      bool heyYo(List oldPLayers , List selectedChoice) {
-        if (oldPLayers != null) {
-          var yo = oldPLayers.map((oldChoice) {
-            // print(oldChoice['name']);
-            // print('oldChoice');
-            return oldChoice['name'];
-            //  => arr.containsValue(oldChoice)
-          }).toString();
 
-          if (yo != null && yo.contains(item.name)) {
-            print('(${item.name})');
-            print(yo);
-            print('yo');
-            return true;
-          }
-        };
 
-      var searchPlayerNameList = selectedChoice.where((yo) {
-        return yo['name'].contains(item.name);
-      });
+      // FUNCTION TO EXTEND PLAYER PICKER FUNCTIONALITY ,
+      // DETERMINE WHICH PLAYERS WERE ADDED ...
 
-      String searchPlater = searchPlayerNameList.map((arr) {
-        return arr.containsValue(item.name);
-      }).toString();
+      // bool heyYo(List oldPLayers , List selectedChoice) {
+      //   if (oldPLayers != null) {
+      //     var yo = oldPLayers.map((oldChoice) {
+      //       // print(oldChoice['name']);
+      //       // print('oldChoice');
+      //       return oldChoice['name'];
+      //       //  => arr.containsValue(oldChoice)
+      //     }).toString();
 
-      return searchPlater == '(true)' ? true : false;
-      };
+      //     if (yo != null && yo.contains(item.name)) {
+      //       print('(${item.name})');
+      //       print(yo);
+      //       print('yo');
+      //       return true;
+      //     }
+      //   };
+
+      // var searchPlayerNameList = selectedChoice.where((yo) {
+      //   return yo['name'].contains(item.name);
+      // });
+
+      // String searchPlater = searchPlayerNameList.map((arr) {
+      //   return arr.containsValue(item.name);
+      // }).toString();
+
+      // return searchPlater == '(true)' ? true : false;
+      // };
+
+      // dynamic moYo(List oldPlayers1 , List selectedChoice1){
+      //           if (oldPlayers1 != null) {
+      //     var yo = oldPlayers1.map((oldChoice1) {
+      //       // print(oldChoice['name']);
+      //       // print('oldChoice');
+      //       return oldChoice1['name'];
+      //       //  => arr.containsValue(oldChoice)
+      //     }).toString();
+
+      //     print(yo);
+      //     print('joyo');
+      // }
+      // }
 
       // print(heyYo(widget.selectedPlayers));
 
@@ -105,10 +121,12 @@ class _PlayerSelectorState extends State<PlayerSelector> {
             ),
           ),
 
-          //this moster should be fixed
-          // searchPlater == '(true)' ? true : false
-          selected: heyYo(widget.selectedPlayers , selectedChoices),
+          // Add heyYo func to determine which players were selected
+          // heyYo(widget.selectedPlayers , selectedChoices) 
+          
+          selected: searchPlater == '(true)' ? true : false,
           onSelected: (selected) {
+            // var boJo = moYo(widget.selectedPlayers , selectedChoices);
             setState(() {
               searchPlater == '(true)'
                   ? selectedChoices.remove(item.name)

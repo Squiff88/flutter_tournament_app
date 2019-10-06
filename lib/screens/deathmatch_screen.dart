@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:tournament_app/screens/cup_match_screen.dart';
+import 'package:tournament_app/screens/cup_seed_screen.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
@@ -19,8 +24,8 @@ class DeathMatchScreen extends StatefulWidget {
   final int _playerIndex;
   final _getWinner;
 
-  DeathMatchScreen(
-      this._cupPlayers, this._deatchMatchPlayer, this._playerIndex, this._getWinner);
+  DeathMatchScreen(this._cupPlayers, this._deatchMatchPlayer, this._playerIndex,
+      this._getWinner);
   @override
   _DeathMatchScreenState createState() => _DeathMatchScreenState();
 }
@@ -36,56 +41,116 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
 
   String matchWinner;
 
+  Timer _timer;
+
+
+  void goBackDelayed() {
+    _timer = new Timer(const Duration(milliseconds: 100), () {
+      Navigator.pop(context);
+    });
+  }
+
+ @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String playerOponent = deathMatchOponent(
         widget._cupPlayers, widget._deatchMatchPlayer, widget._playerIndex);
 
-    List initPlayerLeft = widget._deatchMatchPlayer.split(' ');
-    String playerLeftName = initPlayerLeft[1] + '\n' + initPlayerLeft[2];
-    String playerLeftEmoji = initPlayerLeft[0];
 
-    // right player name and emoji
-    List initPlayerRight = playerOponent.split(' ');
-    String playerRightEmoji = initPlayerRight[0];
-    String playerRightName = initPlayerRight[1] + '\n' + initPlayerRight[2];
+    bool playerLeftSide = widget._cupPlayers['leftSide'].contains(widget._deatchMatchPlayer);
 
-    if (playerLeftScore == 11) {
+
+    List initPlayerLeft;
+    String playerLeftName;
+    String playerLeftEmoji;
+
+    List initPlayerRight;
+    String playerRightName;
+    String playerRightEmoji;
+
+    if(playerLeftSide){
+      // left player name and emoji
+      initPlayerLeft = widget._deatchMatchPlayer.split(' ');
+      playerLeftName = initPlayerLeft[1] + '\n' + initPlayerLeft[2];
+      playerLeftEmoji = initPlayerLeft[0];
+
+      // right player name and emoji
+      initPlayerRight = playerOponent.split(' ');
+      playerRightName = initPlayerRight[1] + '\n' + initPlayerRight[2];
+      playerRightEmoji = initPlayerRight[0];
+
+    }else{
+      
+      // right player name and emoji
+      initPlayerRight = widget._deatchMatchPlayer.split(' ');
+      playerRightName = initPlayerRight[1] + '\n' + initPlayerRight[2];
+      playerRightEmoji = initPlayerRight[0];
+
+      // left player name and emoji
+      initPlayerLeft = playerOponent.split(' ');
+      playerLeftName = initPlayerLeft[1] + '\n' + initPlayerLeft[2];
+      playerLeftEmoji = initPlayerLeft[0];
+    }
+
+
+    if (playerLeftScore == 2) {
       final matchInfo = {
         'winner': {
           'name': playerLeftName,
           'emoji': playerLeftEmoji,
-          'score': playerLeftScore
+          'score': playerLeftScore,
+          'side' : 'leftSide',
+          'index': widget._playerIndex
         },
         'loser': {
           'name': playerRightName,
           'emoji': playerRightEmoji,
-          'score': playerRightScore
+          'score': playerRightScore,
+          'side' : 'rightSide',
+          'index': widget._playerIndex
         }
       };
 
       widget._getWinner(matchInfo);
-      print(playerLeftName);
-      print('playerLeftName');
-      setState(() {
-        matchWinner = playerLeftName;
-      });
+      goBackDelayed();
+
     }
 
-    if (playerRightScore == 11) {
-      print(playerRightName);
-      print('playerRightName');
+    if (playerRightScore == 2) {
+      final matchInfo = {
+        'winner': {
+          'name': playerRightName,
+          'emoji': playerRightEmoji,
+          'score': playerRightScore,
+          'side' : 'rightSide',
+          'index': widget._playerIndex
 
-      setState(() {
-        matchWinner = playerRightName;
-      });
+        },
+        'loser': {
+          'name': playerLeftName,
+          'emoji': playerLeftEmoji,
+          'score': playerLeftScore,
+          'side' : 'leftSide',
+          'index': widget._playerIndex
+
+        }
+      };
+
+
+      widget._getWinner(matchInfo);
+
+      goBackDelayed();
+
     }
 
     return Scaffold(
       appBar: GradientAppBar(
-          title: Text('Cup Mode'), gradient: AppTheme.AppBarColor.linear),
-      // floatingActionButton: ActionButton('home_page'),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          title: Text('Slammers Deathmatch'), gradient: AppTheme.AppBarColor.linear),
       body: Container(
         // color: Colors.white,
         width: double.infinity,
@@ -94,10 +159,6 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
           builder: (context, child, model) {
             var initial;
             double distance = 0;
-
-            // left player name and emoji
-
-            // dynamic playerLeftIndicator = playerScore ? 500 : 120;
 
             return Container(
               alignment: Alignment.center,
@@ -152,7 +213,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                           Container(
                             // color: Colors.blueAccent,
                             alignment: Alignment.center,
-                            // margin: EdgeInsets.only(top:0),
+                            margin: EdgeInsets.only(top: 0),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.875,
                             child: Column(
@@ -168,7 +229,10 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                 Text(
                                   playerLeftName,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 23),
+                                  style: TextStyle(
+                                      fontSize: 26,
+                                      fontFamily:
+                                          AppTheme.FontFamilies.slightlyCurvy),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 125),
@@ -267,6 +331,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                             alignment: Alignment.center,
                             width: double.infinity,
                             height: MediaQuery.of(context).size.height * 0.875,
+                            // margin: EdgeInsets.only(top: 1),
                             // color: Colors.yellow,
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -281,7 +346,10 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                 Text(
                                   playerRightName,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 23),
+                                  style: TextStyle(
+                                      fontSize: 26,
+                                      fontFamily:
+                                          AppTheme.FontFamilies.slightlyCurvy),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 125),
