@@ -9,11 +9,11 @@ class PlayerBio {
   Map<String , List<String>> achievements;
 
   PlayerBio({
-    @required this.id,
     @required this.name,
-    @required this.points,
+    @required this.emoji,
+    this.id,
+    this.points,
     this.date,
-    this.emoji,
     this.achievements
   });
 }

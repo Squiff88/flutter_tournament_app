@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-// import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/player_bio.dart';
-import 'package:tournament_app/screens/cup_seed_screen.dart';
 import 'package:tournament_app/screens/deathmatch_screen.dart';
-// import 'package:tournament_app/screens/home_screen.dart';
+import 'package:tournament_app/screens/season_winner_screen.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
-// import 'package:tournament_app/widgets/action_button.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class CupMatchScreen extends StatefulWidget {
@@ -24,25 +21,32 @@ class CupMatchScreen extends StatefulWidget {
 }
 
 class _CupMatchScreenState extends State<CupMatchScreen> {
-  Map<String, dynamic> winner = {};
   List<String> losersList = List();
   List winnersList = List();
   Map<String, Map<String, String>> deathmatchScore;
 
   int cupPlayersLen;
 
-  Map<String, Map<String, Object>> playedMatches;
   Timer _timer;
 
   List<String> leftScore = [];
   List<String> rightScore = [];
+
+  List<String> leftScoreNew = ['0', '0', '0', '0', '0', '0', '0'];
+  List<String> rightScoreNew = ['0', '0', '0', '0', '0', '0', '0'];
+
+  bool newRound = false;
+  bool winner = false;
 
   String matchWinner = '';
 
   @override
   void dispose() {
     super.dispose();
+
     _timer.cancel();
+
+    print('disposing ......');
   }
 
   @override
@@ -50,7 +54,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
     super.initState();
     // Add listeners to this class
 
-    print('cupPlayersLen');
+    print('init state ........');
 
     int cupLen = widget.cupPlayers['leftSide'].length;
 
@@ -69,26 +73,16 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
   }
 
   @override
-  void didUpdateWidget(CupMatchScreen oldWidget) {
-    if (oldWidget.cupPlayers != widget.cupPlayers) {
-      // _init();
-      print('hey yoyo oy oy oyo ');
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final playersLen = widget.cupPlayers['leftSide'].length +
         widget.cupPlayers['rightSide'].length;
-
 
     String message = '';
     final playerLength = playersLen;
     switch (playerLength) {
       case 2:
         message = 'Final';
-        break; 
+        break;
       case 4:
         message = 'Semi Finals';
         break;
@@ -102,51 +96,88 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
         message = 'Cup Draw';
     }
 
-    print(message);
-    print('message..........');
-    
-    print(playersLen);
-    print('playersLen');
+    void routeToWinner() {
+      var playerBio = winnersList[0].split(' ');
+      print(winnersList);
+      print(playerBio);
+      print('winnersList');
+      _timer = new Timer(const Duration(milliseconds: 400), () {
+        Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.rightToLeftWithFade,
+                child: SeasonWinner(
+                  winner: PlayerBio(
+                    date: DateTime.now(),
+                    name: playerBio[1],
+                    emoji: '🏓',
+                    achievements: {
+                      'cup': ['Season 6'],
+                    },
+                  ),
+                  winnerImage:
+                      'https://media.giphy.com/media/l0Ex3vQtX5VX2YtAQ/giphy.gif',
+                  title: 'Slammer\'s Cup',
+                ),
+                curve: Curves.fastOutSlowIn));
+      });
+    }
+
     final tournamentPhase = (int playersLen, List listOfWinners) {
       int tournamentFormat;
 
       tournamentFormat = playersLen;
 
-      double nextPhase = tournamentFormat / 2;
-
-      print('getting here ...........');
-      // check if next phase
+      int nextPhase = (tournamentFormat ~/ 2).toInt();
 
       if (listOfWinners.length == nextPhase) {
-        print('NEXT PHase....');
-        nextPhase = nextPhase / 2;
-        print(nextPhase);
-    
-        if (nextPhase <= 2) {
+        nextPhase = (tournamentFormat ~/ 2).toInt();
+        print('here !!!!-----!!!!');
+        double winnersLen = widget.cupPlayers['leftSide'].length / 2;
+        int nextPhasePlayers = winnersLen.toInt();
+
+        this.setState(() {
+          newRound = true;
+
+          leftScore = List.generate(nextPhasePlayers, (i) {
+            return '0';
+          });
+
+          print('between states !!!!!!!!!!!!!!!');
+
+          rightScore = List.generate(nextPhasePlayers, (i) {
+            return '0';
+          });
+        });
+
+        if (nextPhase < 2) {
           print('finallls ________________');
           print(nextPhase);
-        widget.invokeNextRound(winnersList);
 
-          return;
+          this.setState(() {
+            leftScore = List.generate(1, (i) {
+              return '0';
+            });
+
+            rightScore = List.generate(1, (i) {
+              return '0';
+            });
+          });
+
+          this.setState(() {
+            newRound = false;
+          });
+
+          // widget.invokeNextRound(winnersList);
+          // winnersList = List();
+
+          routeToWinner();
+          return null;
         }
 
         widget.invokeNextRound(winnersList);
 
-        double winnersLen = widget.cupPlayers['leftSide'].length / 2;
-        int nextPhasePlayers = winnersLen.toInt();
-
-        print(winnersList);
-        print(playersLen);
-        print('winnersList.length');
-
-        leftScore = List.generate(nextPhasePlayers, (i) {
-          return '0';
-        });
-
-        rightScore = List.generate(nextPhasePlayers, (i) {
-          return '0';
-        });
-        
+        winnersList = List();
       }
     };
 
@@ -154,11 +185,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       _timer = new Timer(const Duration(milliseconds: 100), () {
         var winnerName = info['winner']['name'].split('\n').join(' ');
         var loserName = info['loser']['name'].split('\n').join(' ');
+
         setState(() {
           winnersList.add('${info['winner']['emoji']} ${winnerName}');
           losersList.add('${info['loser']['emoji']} ${loserName}');
-
-          playedMatches = info;
         });
         if (winnersList.length > 0 && losersList.length > 0) {
           deathmatchScore = {
@@ -173,7 +203,15 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
             'index': {'indexMatch': '${info['loser']['index']}'},
           };
         }
+
+        this.setState(() {
+          newRound = false;
+        });
+
         tournamentPhase(playersLen, winnersList);
+
+        print(deathmatchScore);
+        print('final score deathmatchScore');
       });
     }
 
@@ -188,6 +226,22 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       rightScore.replaceRange(parsedIndex, parsedIndex + 1, [rightSideScore]);
     }
 
+    void updateMatchScore(matchScore, player, index) {
+      if (deathmatchScore != null &&
+          deathmatchScore['index']['indexMatch'] == index.toString()) {
+        var leftInfo = deathmatchScore['score']['leftSide'];
+        var rightInfo = deathmatchScore['score']['rightSide'];
+        var matchIndex = deathmatchScore['index']['indexMatch'];
+
+        if (matchWinner != player) {
+          print('calling update score .....');
+          matchWinner = player;
+        }
+
+        updateMatchList(leftInfo, rightInfo, matchIndex);
+      }
+    }
+
     return Container(
       width: double.infinity,
       child: ScopedModelDescendant<PlayerBioModel>(
@@ -199,7 +253,14 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
             width: double.infinity,
             child: Column(
               children: <Widget>[
-                Text('${message}'),
+                Text(
+                  '${message}',
+                  style: TextStyle(
+                    fontFamily: AppTheme.FontFamilies.curvy,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -214,8 +275,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                           children: widget.cupPlayers['leftSide']
                               .asMap()
                               .map((index, player) {
-                                var winner = winnersList.contains(player);
-                                var loser = losersList.contains((player));
+                                bool loser = losersList.contains((player));
+
+                                updateMatchScore(
+                                    deathmatchScore, player, index);
 
                                 final List splittedName = player.split(' ');
                                 final String shortName = splittedName[0] +
@@ -243,8 +306,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                     child: Container(
                                         // color: Colors.blue,
                                         width: double.infinity,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         margin: EdgeInsets.only(top: 15),
                                         child: Text(
                                           shortName,
@@ -273,25 +336,15 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                             children: widget.cupPlayers['rightSide']
                                 .asMap()
                                 .map((index, player) {
-                                  var winner = winnersList.contains(player);
-                                  var loser = losersList.contains((player));
+                                  updateMatchScore(
+                                      deathmatchScore, player, index);
 
-                                  if (deathmatchScore != null &&
-                                      deathmatchScore['index']['indexMatch'] ==
-                                          index.toString()) {
-                                    var leftInfo =
-                                        deathmatchScore['score']['leftSide'];
-                                    var rightInfo =
-                                        deathmatchScore['score']['rightSide'];
-                                    var matchIndex =
-                                        deathmatchScore['index']['indexMatch'];
-
-                                    if (matchWinner != player) {
-                                      matchWinner = player;
-                                      updateMatchList(
-                                          leftInfo, rightInfo, matchIndex);
-                                    }
-                                  }
+                                  var leftScoreCurrent = newRound
+                                      ? '${leftScoreNew[index]}'
+                                      : '${leftScore[index]}';
+                                  var rightScoreCurrent = newRound
+                                      ? "${rightScoreNew[index]}"
+                                      : "${rightScore[index]}";
 
                                   return MapEntry(
                                     index,
@@ -315,9 +368,9 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                         alignment: Alignment.center,
                                         margin: EdgeInsets.only(top: 21),
                                         child: Text(
-                                          '${leftScore[index]}'
+                                          '${leftScoreCurrent}'
                                           ' : '
-                                          "${rightScore[index]}",
+                                          '${rightScoreCurrent}',
                                           style: TextStyle(
                                               fontSize: 19,
                                               fontFamily: AppTheme
@@ -339,8 +392,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                           children: widget.cupPlayers['rightSide']
                               .asMap()
                               .map((index, player) {
-                                var winner = winnersList.contains(player);
                                 var loser = losersList.contains((player));
+
+                                updateMatchScore(
+                                    deathmatchScore, player, index);
 
                                 final List splittedName = player.split(' ');
                                 final String shortName = splittedName[1] +
@@ -366,12 +421,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                                   curve: Curves.fastOutSlowIn));
                                         },
                                         child: Container(
-
                                           width: double.infinity,
-                                          padding:
-                                              EdgeInsets.symmetric(horizontal: 10),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10),
                                           alignment: Alignment.centerRight,
-
                                           margin: EdgeInsets.only(top: 15),
                                           child: Text(
                                             shortName,

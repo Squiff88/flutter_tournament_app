@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:tournament_app/models/player_bio.dart';
-import 'package:tournament_app/store/tournament_info_model.dart';
-
-import 'package:tournament_app/screens/season_winner_screen.dart';
-import 'package:tournament_app/store/player_bio_model.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:tournament_app/widgets/season_number.dart';
+
+import '../models/player_bio.dart';
+import '../store/tournament_info_model.dart';
+
+import '../screens/season_winner_screen.dart';
+import '../store/player_bio_model.dart';
+import '../widgets/season_number.dart';
 
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
@@ -188,14 +189,19 @@ class _HomePageState extends State<HomePage> {
                                           rebuildOnChange: true)
                                       .playerBio;
                               final PlayerBio winner = firstPlayer.elementAt(0);
-
                               Navigator.push(
                                   context,
                                   PageTransition(
                                       type: PageTransitionType
                                           .rightToLeftWithFade,
                                       child:
-                                          SeasonWinner(winner, seasonCounter),
+                                          SeasonWinner(
+                                            winner: winner,
+                                            winnerImage: 'https://media.giphy.com/media/5xtDarEWbFEH1JUC424/source.gif',
+                                            title: 'Season',
+                                            counter: seasonCounter,
+
+                                          ),
                                       curve: Curves.fastOutSlowIn));
 
                               model.setSeasonNumber(seasonCounter);

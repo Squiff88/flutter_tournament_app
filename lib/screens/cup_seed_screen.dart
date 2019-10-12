@@ -130,8 +130,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   void nextRound(players){
 
     var seedPlayer1 = cupDraw(players);
-    print(seedPlayer1);
-    print('seedPlayer');
+
     setState(() {
       seededPlayers = seedPlayer1;
       showPlayers = false;

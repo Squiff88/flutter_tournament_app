@@ -9,21 +9,28 @@ import '../widgets/action_button.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class SeasonWinner extends StatelessWidget {
-  final int seasonCounter;
-  final PlayerBio winner;
+  final String title;
+  final dynamic winner;
+  final int counter;
+  final String winnerImage;
 
-  SeasonWinner(this.winner, this.seasonCounter);
+  SeasonWinner({Key key, @required this.winner, @required this.title, this.counter, @required this.winnerImage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(title);
+    print(winner);
+    print('info for winner ....');
     final int seasonNum =
         ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true)
             .getSeasonNumber;
-    final int currentSeason = seasonNum + seasonCounter - 1;
+    final numToSeason = counter != null ? counter : null;
+    final currentSeason = numToSeason != null ? (seasonNum + counter - 1) : '';
     return Scaffold(
         appBar: GradientAppBar(
           title: Text(
-            'Season ${currentSeason}',
+            '${title} ${currentSeason}',
             style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.regular,
                 fontWeight: FontWeight.w700,
@@ -38,7 +45,7 @@ class SeasonWinner extends StatelessWidget {
           margin: EdgeInsets.all(0),
           child: ScopedModelDescendant<PlayerBioModel>(
             builder: (context, child, model) {
-              winner.achievements['season'].add('Season ${currentSeason}');
+              // winner.achievements['season'].add('Season ${currentSeason}');
               return Container(
                 color: Colors.white,
                 margin: EdgeInsets.only(top: 30),
@@ -58,7 +65,7 @@ class SeasonWinner extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 40),
+                      margin: EdgeInsets.only(top: 25),
                       child: Text(winner.emoji,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -67,19 +74,22 @@ class SeasonWinner extends StatelessWidget {
                             fontFamily: 'KaushanScript-Regular',
                           )),
                     ),
-                    Text(
-                      '${winner.name}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'KaushanScript-Regular',
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        '${winner.name}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'KaushanScript-Regular',
+                        ),
                       ),
                     ),
                     Container(
                         width: double.infinity,
                         child: Image.network(
-                          'https://media.giphy.com/media/5xtDarEWbFEH1JUC424/source.gif',
+                          this.winnerImage,
                           fit: BoxFit.cover,
                         )),
                   ],
