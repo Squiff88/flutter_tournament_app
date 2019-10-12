@@ -29,9 +29,11 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
   Timer _timer;
 
+  // Actual Array with the players score;
   List<String> leftScore = [];
   List<String> rightScore = [];
 
+  // Dummy Array for the beggining of each new round
   List<String> leftScoreNew = ['0', '0', '0', '0', '0', '0', '0'];
   List<String> rightScoreNew = ['0', '0', '0', '0', '0', '0', '0'];
 
@@ -69,6 +71,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       rightScore = List.generate(cupLen, (i) {
         return '0';
       });
+
     });
   }
 
@@ -98,9 +101,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
     void routeToWinner() {
       var playerBio = winnersList[0].split(' ');
-      print(winnersList);
-      print(playerBio);
-      print('winnersList');
+
       _timer = new Timer(const Duration(milliseconds: 400), () {
         Navigator.push(
             context,
@@ -123,6 +124,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       });
     }
 
+    // Trigger new round
     final tournamentPhase = (int playersLen, List listOfWinners) {
       int tournamentFormat;
 
@@ -130,29 +132,30 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
       int nextPhase = (tournamentFormat ~/ 2).toInt();
 
+
+      // if all matches in the current round are player , proceed with next round
       if (listOfWinners.length == nextPhase) {
+
         nextPhase = (tournamentFormat ~/ 2).toInt();
-        print('here !!!!-----!!!!');
         double winnersLen = widget.cupPlayers['leftSide'].length / 2;
         int nextPhasePlayers = winnersLen.toInt();
 
         this.setState(() {
+
           newRound = true;
 
           leftScore = List.generate(nextPhasePlayers, (i) {
             return '0';
           });
 
-          print('between states !!!!!!!!!!!!!!!');
-
           rightScore = List.generate(nextPhasePlayers, (i) {
             return '0';
           });
+
         });
 
+        // Determine when is the final match
         if (nextPhase < 2) {
-          print('finallls ________________');
-          print(nextPhase);
 
           this.setState(() {
             leftScore = List.generate(1, (i) {
@@ -177,12 +180,14 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
         widget.invokeNextRound(winnersList);
 
+        // Reset winnersList for the new round
         winnersList = List();
       }
     };
 
     void getWinnerDelayed(info) {
       _timer = new Timer(const Duration(milliseconds: 100), () {
+
         var winnerName = info['winner']['name'].split('\n').join(' ');
         var loserName = info['loser']['name'].split('\n').join(' ');
 
@@ -190,6 +195,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
           winnersList.add('${info['winner']['emoji']} ${winnerName}');
           losersList.add('${info['loser']['emoji']} ${loserName}');
         });
+
+        // if we have a result from a match assign it to deathMatchScore
         if (winnersList.length > 0 && losersList.length > 0) {
           deathmatchScore = {
             "score": {
@@ -204,14 +211,15 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
           };
         }
 
-        this.setState(() {
-          newRound = false;
-        });
+        // When new round starts , reset the newRound variable to false
+        
+          this.setState(() {
+            newRound = false;
+          });
+        
 
         tournamentPhase(playersLen, winnersList);
 
-        print(deathmatchScore);
-        print('final score deathmatchScore');
       });
     }
 
@@ -227,14 +235,14 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
     }
 
     void updateMatchScore(matchScore, player, index) {
-      if (deathmatchScore != null &&
-          deathmatchScore['index']['indexMatch'] == index.toString()) {
-        var leftInfo = deathmatchScore['score']['leftSide'];
-        var rightInfo = deathmatchScore['score']['rightSide'];
-        var matchIndex = deathmatchScore['index']['indexMatch'];
+      if (matchScore != null &&
+          matchScore['index']['indexMatch'] == index.toString()) {
+        var leftInfo = matchScore['score']['leftSide'];
+        var rightInfo = matchScore['score']['rightSide'];
+        var matchIndex = matchScore['index']['indexMatch'];
 
         if (matchWinner != player) {
-          print('calling update score .....');
+          
           matchWinner = player;
         }
 
@@ -336,8 +344,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                             children: widget.cupPlayers['rightSide']
                                 .asMap()
                                 .map((index, player) {
-                                  updateMatchScore(
-                                      deathmatchScore, player, index);
+                             
 
                                   var leftScoreCurrent = newRound
                                       ? '${leftScoreNew[index]}'
@@ -345,6 +352,17 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                   var rightScoreCurrent = newRound
                                       ? "${rightScoreNew[index]}"
                                       : "${rightScore[index]}";
+
+
+                                  print(leftScoreCurrent);
+                                  print(rightScoreCurrent);
+                                  print('current score...');
+                                  print(deathmatchScore);
+                                  print(player);
+                                  print(index);
+
+                                       updateMatchScore(
+                                      deathmatchScore, player, index);
 
                                   return MapEntry(
                                     index,

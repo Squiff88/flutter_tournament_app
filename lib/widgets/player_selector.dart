@@ -7,6 +7,7 @@ class PlayerSelector extends StatefulWidget {
   final List<PlayerBio> players;
   final List selectedPlayers;
   final Function(List<Map<String, String>>) onSelectionChanged; // +add
+  
 
   PlayerSelector({this.players, this.selectedPlayers, this.onSelectionChanged});
   @override
@@ -17,8 +18,10 @@ class _PlayerSelectorState extends State<PlayerSelector> {
   List<Map<String, String>> selectedChoices = List();
 
 
-  // this function will build and return the choice list
+
+
   _buildChoiceList() {
+
     List<Widget> choices = List();
     widget.players.forEach((item) {
 
@@ -26,13 +29,15 @@ class _PlayerSelectorState extends State<PlayerSelector> {
       final String firstName = playerName.split(' ')[0].split('')[0];
       final String lastName = playerName.split(' ')[1].split('')[0];
 
-      Iterable<Map<String, String>> searchList = selectedChoices.where((yo) {
-        return yo['name'].contains(item.name);
+      Iterable<Map<String, String>> searchList = selectedChoices.where((selectPlayer) {
+        return selectPlayer['name'].contains(item.name);
       });
 
-      String searchPlater = searchList.map((arr) {
+      String searchPlayer = searchList.map((arr) {
         return arr.containsValue(item.name);
       }).toString();
+
+   
 
 
 
@@ -84,12 +89,7 @@ class _PlayerSelectorState extends State<PlayerSelector> {
       // print(heyYo(widget.selectedPlayers));
 
       choices.add(Container(
-        // alignment: Alignment.top,
-        // height: 20,
-        // margin: EdgeInsets.fromLTRB(double.parse(randomMargin.toString()) ,double.parse(randomMargin.toString()) , 0 ,0),
-        // alignment: Alignment.center,
-        // height: 25,
-        // color:Colors.black,
+
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: ChoiceChip(
           backgroundColor: Colors.white,
@@ -124,11 +124,11 @@ class _PlayerSelectorState extends State<PlayerSelector> {
           // Add heyYo func to determine which players were selected
           // heyYo(widget.selectedPlayers , selectedChoices) 
           
-          selected: searchPlater == '(true)' ? true : false,
+          selected: searchPlayer == '(true)' ? true : false,
           onSelected: (selected) {
             // var boJo = moYo(widget.selectedPlayers , selectedChoices);
             setState(() {
-              searchPlater == '(true)'
+              searchPlayer == '(true)'
                   ? selectedChoices.remove(item.name)
                   : selectedChoices
                       .add({'emoji': item.emoji, 'name': item.name});

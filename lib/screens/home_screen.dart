@@ -21,8 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   String playerId;
-  // int seasonNumber = 5;
   int playerPoints;
   int seasonCounter = 0;
 
@@ -32,25 +32,6 @@ class _HomePageState extends State<HomePage> {
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
   }
 
-  @override
-  void deactivate() {
-    super.deactivate();
-    print('deactivate');
-  }
-
-  @override
-  void didUpdateWidget(HomePage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    print('did updated');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // ScopedModel.of<PlayerBioModel>(context).sortPlayers();
-    print(' dependencies did updated');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +54,6 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           image: DecorationImage(
-              // colorFilter: ColorFilter.mode(Colors.blueGrey, BlendMode.screen),
               image: AssetImage("assets/images/table_tennis.jpg"),
               fit: BoxFit.scaleDown,
               alignment: Alignment.bottomRight),
@@ -106,7 +86,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: DetailScreen()));
                                 model.selectPlayer(model.playerBio[index].id);
                                 Navigator.push(
                                     context,
@@ -223,3 +202,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+

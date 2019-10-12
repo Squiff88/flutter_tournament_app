@@ -27,7 +27,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Future<String> _askedToLead() async {
+    Future<String> deleteDialog() async {
       switch (await showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -241,8 +241,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                         alignment: Alignment.centerRight,
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          final result = _askedToLead();
-                          print('result');
+                          final result = deleteDialog();
+
                           final selectedPlayer = ScopedModel.of<PlayerBioModel>(
                                   context,
                                   rebuildOnChange: true)

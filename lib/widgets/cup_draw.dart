@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-Map <String ,List<String>> cupDraw (playerList) {
+Map<String ,List<String>> cupDraw (playerList) {
 
   Map<String ,List<String>> cupSchema = {
     'leftSide': [],
@@ -24,7 +24,7 @@ Map <String ,List<String>> cupDraw (playerList) {
     return cupSchema;
   }else{
     print('no correct len of players');
-    return {"fail" : ['Cup players should be at least 4']};
+    return {"fail" : ['Select at least 4 players to start the Cup']};
   }
 }
 

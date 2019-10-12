@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'dart:math';
 
@@ -47,6 +48,45 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
     super.didUpdateWidget(oldWidget);
   }
 
+  Future<String> messageDialog(message) async {
+    var popupMessage = message[0];
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(
+              '${popupMessage}',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontFamily: AppTheme.FontFamilies.slightlyCurvy,
+                fontSize: 24
+                ),
+              ),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                },
+                child: Text(
+                  'OK',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: AppTheme.FontFamilies.curvy,
+                    color: AppTheme.AppColors.intenseFire
+                    ),
+                  ),
+              ),
+            ],
+          );
+        })) {
+      case 'OK':
+        return 'OK';
+        // ...
+        break;
+    }
+  }
+
   _showReportDialog(List<PlayerBio> players) {
     showDialog(
         context: context,
@@ -61,9 +101,9 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                 "Available Slammers :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: AppTheme.AppColors.intenseFire,
-                    fontFamily: AppTheme.FontFamilies.regular,
-                    fontSize: 22,
+                    // color: AppTheme.AppColors.intenseFire,
+                    fontFamily: AppTheme.FontFamilies.slightlyCurvy,
+                    fontSize: 24,
                     fontWeight: FontWeight.w500),
               ),
               content: Container(
@@ -96,7 +136,11 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                 FlatButton(
                   child: Text(
                     "Done",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                      color: AppTheme.AppColors.fire,
+                      fontFamily: AppTheme.FontFamilies.curvy,
+                      fontSize: 24
+                      ),
                   ),
                   onPressed: () => Navigator.of(context).pop(),
                 )
@@ -126,9 +170,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
     return items;
   }
 
-
-  void nextRound(players){
-
+  void nextRound(players) {
     var seedPlayer1 = cupDraw(players);
 
     setState(() {
@@ -136,18 +178,13 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
       showPlayers = false;
       startCup = true;
     });
-
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     if (shuffledPlayers.length > 0) {
       int playersLen = shuffledPlayers.length;
     }
-
 
     return Scaffold(
       appBar: GradientAppBar(
@@ -273,9 +310,15 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             alignment: Alignment.center,
                             icon: Icon(Icons.done_all),
                             onPressed: () {
-                              // print(shuffledPlayers);
-                              // print('shuffledPlayers');
                               final newPlayes = cupDraw(shuffledPlayers);
+                              print(newPlayes['fail'] );
+                              print('newPlayes');
+
+                              if (newPlayes['fail'] != null && newPlayes['fail'].length > 0) {
+                                print('inside ...... fails...');
+                                return messageDialog(newPlayes['fail']);
+                              }
+                            
                               setState(() {
                                 seededPlayers = newPlayes;
                                 showPlayers = false;
@@ -306,7 +349,10 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     height: MediaQuery.of(context).size.height * 0.3,
-                    child: CupMatchScreen(cupPlayers: seededPlayers , invokeNextRound: nextRound,),
+                    child: CupMatchScreen(
+                      cupPlayers: seededPlayers,
+                      invokeNextRound: nextRound,
+                    ),
                   ),
               ],
             );

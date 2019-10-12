@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../models/player_bio.dart';
+
 import '../store/player_bio_model.dart';
 import '../store/tournament_info_model.dart';
-import '../widgets/action_button.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class SeasonWinner extends StatelessWidget {
@@ -19,12 +18,8 @@ class SeasonWinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(title);
-    print(winner);
-    print('info for winner ....');
-    final int seasonNum =
-        ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true)
-            .getSeasonNumber;
+
+    final int seasonNum = ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true).getSeasonNumber;
     final numToSeason = counter != null ? counter : null;
     final currentSeason = numToSeason != null ? (seasonNum + counter - 1) : '';
     return Scaffold(
@@ -38,14 +33,13 @@ class SeasonWinner extends StatelessWidget {
           ),
           gradient: AppTheme.AppBarColor.linear,
         ),
-        // floatingActionButton: ActionButton('Winner !'),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
         body: Container(
           width: double.infinity,
           margin: EdgeInsets.all(0),
           child: ScopedModelDescendant<PlayerBioModel>(
             builder: (context, child, model) {
-              // winner.achievements['season'].add('Season ${currentSeason}');
+       
               return Container(
                 color: Colors.white,
                 margin: EdgeInsets.only(top: 30),
