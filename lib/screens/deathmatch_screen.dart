@@ -98,7 +98,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
     }
 
 
-    if (playerLeftScore == 2) {
+    if (playerLeftScore == 11) {
       final matchInfo = {
         'winner': {
           'name': playerLeftName,
@@ -121,7 +121,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
 
     }
 
-    if (playerRightScore == 2) {
+    if (playerRightScore == 11) {
       final matchInfo = {
         'winner': {
           'name': playerRightName,

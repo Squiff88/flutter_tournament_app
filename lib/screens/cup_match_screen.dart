@@ -107,6 +107,9 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
             context,
             PageTransition(
                 type: PageTransitionType.rightToLeftWithFade,
+                curve: Curves.easeInOutSine,
+                alignment: Alignment.bottomRight,
+                duration: Duration(milliseconds: 350),
                 child: SeasonWinner(
                   winner: PlayerBio(
                     date: DateTime.now(),
@@ -120,7 +123,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                       'https://media.giphy.com/media/l0Ex3vQtX5VX2YtAQ/giphy.gif',
                   title: 'Slammer\'s Cup',
                 ),
-                curve: Curves.fastOutSlowIn));
+                ));
       });
     }
 
@@ -185,6 +188,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       }
     };
 
+
+
     void getWinnerDelayed(info) {
       _timer = new Timer(const Duration(milliseconds: 100), () {
 
@@ -226,6 +231,23 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
     void getWinner(matchInfo) {
       getWinnerDelayed(matchInfo);
     }
+
+    bool matchPlayed(currentPlayer){
+      if(winnersList.contains(currentPlayer)){
+        print('winners list playerd ...');
+        return true;
+      }
+      if(losersList.contains(currentPlayer)){
+        print('losers list playerd ...');
+
+        return true;
+      }
+      else {
+        print('not playerd list playerd ...');
+
+        return false;
+      }
+    };
 
     dynamic updateMatchList(leftSideScore, rightSideScore, matchIndex) {
       var parsedIndex = int.parse(matchIndex);
@@ -295,21 +317,42 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                     '.' +
                                     splittedName[2].split('')[0];
 
+                                bool isMatchPlayed = matchPlayed(player);
+                                
                                 return MapEntry(
                                   index,
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: isMatchPlayed ? (){} : (){
+
+                                      print(player);
+                                      print(losersList);
+                                      print('losersList....');
+
+
+
+                                      if(losersList.contains(player)){
+                                        print('alredy player loser...');
+                                        return null;
+                                      }
+
+                                      if(winnersList.contains(player)){
+                                        print('alredy player winner...');
+                                        return null;
+                                      }
+
                                       Navigator.push(
                                           context,
                                           PageTransition(
-                                              type: PageTransitionType
-                                                  .rightToLeftWithFade,
+                                              type: PageTransitionType.leftToRightWithFade,
+                                              curve: Curves.easeInOutSine,
+                                              alignment: Alignment.bottomRight,
+                                              duration: Duration(milliseconds: 350),
                                               child: DeathMatchScreen(
                                                   widget.cupPlayers,
                                                   player,
                                                   index,
                                                   getWinner),
-                                              curve: Curves.fastOutSlowIn));
+                                              ));
                                     },
                                     child: Container(
                                         // color: Colors.blue,
@@ -344,7 +387,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                             children: widget.cupPlayers['rightSide']
                                 .asMap()
                                 .map((index, player) {
-                             
 
                                   var leftScoreCurrent = newRound
                                       ? '${leftScoreNew[index]}'
@@ -354,31 +396,28 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                       : "${rightScore[index]}";
 
 
-                                  print(leftScoreCurrent);
-                                  print(rightScoreCurrent);
-                                  print('current score...');
-                                  print(deathmatchScore);
-                                  print(player);
-                                  print(index);
-
                                        updateMatchScore(
                                       deathmatchScore, player, index);
+
+                                  bool isMatchPlayed = matchPlayed(player);
 
                                   return MapEntry(
                                     index,
                                     GestureDetector(
-                                      onTap: () {
+                                      onTap: isMatchPlayed ? (){} : (){
                                         Navigator.push(
                                           context,
                                           PageTransition(
-                                              type: PageTransitionType
-                                                  .rightToLeftWithFade,
+                                              type: PageTransitionType.rightToLeftWithFade,
+                                              curve: Curves.easeInOutSine,
+                                              alignment: Alignment.bottomRight,
+                                              duration: Duration(milliseconds: 350),
                                               child: DeathMatchScreen(
                                                   widget.cupPlayers,
                                                   player,
                                                   index,
                                                   getWinner),
-                                              curve: Curves.fastOutSlowIn),
+                                              ),
                                         );
                                       },
                                       child: Container(
@@ -422,21 +461,25 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                     '  ' +
                                     splittedName[0];
 
+                                bool isMatchPlayed = matchPlayed(player);
+
                                 return MapEntry(
                                     index,
                                     GestureDetector(
-                                        onTap: () {
+                                        onTap: isMatchPlayed ? (){} : (){
                                           Navigator.push(
                                               context,
                                               PageTransition(
-                                                  type: PageTransitionType
-                                                      .rightToLeftWithFade,
+                                              type: PageTransitionType.leftToRightWithFade,
+                                              curve: Curves.easeInOutSine,
+                                              alignment: Alignment.bottomRight,
+                                              duration: Duration(milliseconds: 350),
                                                   child: DeathMatchScreen(
                                                       widget.cupPlayers,
                                                       player,
                                                       index,
                                                       getWinner),
-                                                  curve: Curves.fastOutSlowIn));
+                                                  ));
                                         },
                                         child: Container(
                                           width: double.infinity,

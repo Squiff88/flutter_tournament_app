@@ -81,7 +81,6 @@
 				05C3F5E6971D820D134D78AE /* Pods-Runner.release.xcconfig */,
 				008B5BAD27AF52CB3F712266 /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -394,7 +393,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.tournamentApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.racketSlammers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -523,7 +522,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.tournamentApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.racketSlammers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -546,7 +545,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.tournamentApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.racketSlammers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

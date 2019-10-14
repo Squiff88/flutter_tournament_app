@@ -315,7 +315,6 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                               print('newPlayes');
 
                               if (newPlayes['fail'] != null && newPlayes['fail'].length > 0) {
-                                print('inside ...... fails...');
                                 return messageDialog(newPlayes['fail']);
                               }
                             

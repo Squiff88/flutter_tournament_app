@@ -1,35 +1,77 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:tournament_app/widgets/add_player.dart';
 
-import '../models/player_bio.dart';
+
 import '../store/tournament_info_model.dart';
-
-import '../screens/season_winner_screen.dart';
 import '../store/player_bio_model.dart';
-import '../widgets/season_number.dart';
-
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
 import '../widgets/action_button.dart';
 import '../theme/theme.dart' as AppTheme;
 
-class HomePage extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
 
   String playerId;
   int playerPoints;
   int seasonCounter = 0;
+  Timer _timer;
+
+
 
   @override
   void initState() {
     super.initState();
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
+
+  Future<String> infoReminder(message) async {
+    var popupMessage = message;
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            children: <Widget>[
+                Image.asset(
+                  'assets/images/info_avatar.gif',
+                  fit: BoxFit.scaleDown,
+                  width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height * 0.3,
+                ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                },
+                child: Text(
+                  'OK',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: AppTheme.FontFamilies.curvy,
+                    color: AppTheme.AppColors.intenseFire
+                    ),
+                  ),
+              ),
+            ],
+          );
+        })) {
+      case 'OK':
+        return 'OK';
+        // ...
+        break;
+    }
+  }
+    _timer = new Timer(const Duration(milliseconds: 2000), () {
+      infoReminder('my message');
+    });
   }
 
 
@@ -37,15 +79,50 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
 
+  Future<String> messageDialog(message) async {
+    var popupMessage = message;
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(
+              '${popupMessage}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: AppTheme.FontFamilies.curvy,
+                fontSize: 28
+                ),
+              ),
+            children: <Widget>[
+              MyCustomForm(),
+              SimpleDialogOption(
+                onPressed: () {
+                  ScopedModel.of<PlayerBioModel>(context,rebuildOnChange: true).sortPlayers();
+
+                  Navigator.pop(context, 'OK');
+                },
+                child: Text(
+                  'OK',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: AppTheme.FontFamilies.curvy,
+                    color: AppTheme.AppColors.intenseFire
+                    ),
+                  ),
+              ),
+            ],
+          );
+        })) {
+      case 'OK':
+        return 'OK';
+        // ...
+        break;
+    }
+  }
+
     return Scaffold(
       appBar: GradientAppBar(
-          title: Text(
-            'Slammers Standings',
-            style: TextStyle(
-                fontFamily: AppTheme.FontFamilies.regular,
-                fontWeight: FontWeight.w600,
-                fontSize: 27),
-          ),
           gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -63,7 +140,18 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SeasonNumber(seasonCounter),
+            // SeasonNumber(seasonCounter),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 25),
+              child: Text(
+                'Welcome Racket Slammers!',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontFamily: AppTheme.FontFamilies.curvy
+                ),
+
+              ),
+            ),
             ScopedModelDescendant<PlayerBioModel>(
               builder: (context, child, model) {
                 return Column(
@@ -90,11 +178,13 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     PageTransition(
-                                        type: PageTransitionType
-                                            .rightToLeftWithFade,
-                                        child:
-                                            PlayerDetails(this.seasonCounter),
-                                        curve: Curves.fastOutSlowIn));
+                                        type: PageTransitionType.rightToLeftWithFade,
+                                        curve: Curves.easeInOutSine,
+                                        alignment: Alignment.bottomRight,
+                                        duration: Duration(milliseconds: 350),
+                                        child:PlayerDetails(this.seasonCounter),
+                                        )
+                                      );
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -102,25 +192,9 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   AwesomeEmojiPicker(
                                       playerEmoji: model.playerBio[index].emoji,
-                                      playerId: info.id),
-                                  Container(
-                                    margin: EdgeInsets.only(right: 45),
-                                    padding: EdgeInsets.all(0),
-                                    child: Text(
-                                      info.name,
-                                      style: TextStyle(
-                                          fontFamily:
-                                              AppTheme.FontFamilies.regular,
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.w500),
+                                      playerId: info.id,
+                                      playerName: info.name
                                     ),
-                                  ),
-                                  Text(
-                                    updatedPoints,
-                                    style: TextStyle(
-                                        fontFamily: AppTheme.FontFamilies.curvy,
-                                        fontSize: 24),
-                                  ),
                                 ],
                               ),
                             ),
@@ -152,41 +226,15 @@ class _HomePageState extends State<HomePage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             color: AppTheme.AppColors.fire.withGreen(140),
-                            child: Text('End Season',
+                            child: Text('Add Slammer',
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.black54,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: AppTheme.FontFamilies.regular)),
                             onPressed: () {
-                              setState(() {
-                                seasonCounter += 1;
-                              });
-
-                              final firstPlayer =
-                                  ScopedModel.of<PlayerBioModel>(context,
-                                          rebuildOnChange: true)
-                                      .playerBio;
-                              final PlayerBio winner = firstPlayer.elementAt(0);
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType
-                                          .rightToLeftWithFade,
-                                      child:
-                                          SeasonWinner(
-                                            winner: winner,
-                                            winnerImage: 'https://media.giphy.com/media/5xtDarEWbFEH1JUC424/source.gif',
-                                            title: 'Season',
-                                            counter: seasonCounter,
-
-                                          ),
-                                      curve: Curves.fastOutSlowIn));
-
-                              model.setSeasonNumber(seasonCounter);
-                              ScopedModel.of<PlayerBioModel>(context,
-                                      rebuildOnChange: true)
-                                  .resetSeason();
+                              messageDialog('Slam it !');
+                        
                             },
                           ),
                         ),

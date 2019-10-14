@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:tournament_app/screens/league_screen.dart';
 import '../screens/cup_seed_screen.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'dart:math';
@@ -7,8 +8,6 @@ import 'dart:math';
 import '../helpers/hex_colors.dart';
 import '../screens/home_screen.dart';
 import '../theme/theme.dart' as AppTheme;
-
-
 
 class ActionButton extends StatefulWidget {
   final heroTagAddition = '';
@@ -29,7 +28,7 @@ class _ActionButtonState extends State<ActionButton> {
         labelText: "League Standings",
         currentButton: FloatingActionButton(
           heroTag:
-            'home ${rng.nextInt(100 - 1)} + ${widget.heroTagAddition} + ${DateTime.now()}',
+              'home ${rng.nextInt(100 - 1)} + ${widget.heroTagAddition} + ${DateTime.now()}',
           backgroundColor: AppTheme.AppColors.fire,
           mini: false,
           child: Icon(Icons.assessment),
@@ -37,12 +36,12 @@ class _ActionButtonState extends State<ActionButton> {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.rightToLeftWithFade,
-                    child: HomePage(),
-                    curve: Curves.fastOutSlowIn)
-              );
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => HomePage()));
+                  type: PageTransitionType.leftToRightWithFade,
+                  curve: Curves.easeInOutSine,
+                  alignment: Alignment.bottomRight,
+                  duration: Duration(milliseconds: 350),
+                  child: LeagueScreen(),
+                ));
           },
         ),
       ));
@@ -57,28 +56,39 @@ class _ActionButtonState extends State<ActionButton> {
           mini: true,
           child: Icon(Icons.turned_in_not),
           onPressed: () {
-                        Navigator.push(
+            Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.rightToLeftWithFade,
-                    child: CupSeedScreen([]),
-                    curve: Curves.fastOutSlowIn)
-              );
+                  type: PageTransitionType.leftToRightWithFade,
+                  curve: Curves.easeInOutSine,
+                  alignment: Alignment.bottomRight,
+                  duration: Duration(milliseconds: 350),
+                  child: CupSeedScreen([]),
+                ));
           },
         ),
       ));
 
       floatingButtons.add(UnicornButton(
         hasLabel: true,
-        labelText: "Hall of Fame",
+        labelText: "Home",
         currentButton: FloatingActionButton(
-          heroTag:
-              'hall of fame ${rng.nextInt(100 - 1)} + ${widget.heroTagAddition} + ${DateTime.now()}',
-          backgroundColor: Color(0xFFefbc87),
-          mini: true,
-          child: Icon(Icons.star),
-          onPressed: () {},
-        ),
+            heroTag:
+                'Home ${rng.nextInt(100 - 1)} + ${widget.heroTagAddition} + ${DateTime.now()}',
+            backgroundColor: Color(0xFFefbc87),
+            mini: true,
+            child: Icon(Icons.star),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRightWithFade,
+                    curve: Curves.easeInOutSine,
+                    alignment: Alignment.bottomRight,
+                    duration: Duration(milliseconds: 350),
+                    child: HomeScreen(),
+                  ));
+            }),
       ));
     }
 
@@ -87,13 +97,12 @@ class _ActionButtonState extends State<ActionButton> {
       parentButtonBackground: AppTheme.AppColors.sand,
       finalButtonIcon: Icon(Icons.graphic_eq),
       parentButton: Icon(
-          Icons.dehaze,
-          color: Colors.red,
-          ),
+        Icons.dehaze,
+        color: Colors.red,
+      ),
       // orientation: UnicornOrientation.HORIZONTAL,
       hasBackground: false,
       childButtons: floatingButtons,
     );
   }
 }
-

@@ -51,6 +51,7 @@ flutter:
   assets:
    - assets/images/table_tennis.jpg
    - assets/images/details_image.jpg
+   - assets/images/info_avatar.gif
    - assets/animations/intro_anim.flr
   #  - images/a_dot_ham.jpeg
 

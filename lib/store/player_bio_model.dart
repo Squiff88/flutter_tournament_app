@@ -99,6 +99,38 @@ class PlayerBioModel extends Model {
 
   int get length => _playerBio.length;
 
+  void addPlayer(playerInfo){
+
+    print(playerInfo);
+    print('initial data ....');
+
+    var first = playerInfo['firstName'];
+    var last = playerInfo['lastName'];
+
+
+    var players = _playerBio.length;
+    var nextPlayerId = players;
+
+    print(first);
+    print(last);
+    print(nextPlayerId);
+    print('info .......');
+
+    _playerBio.add(
+      PlayerBio(
+        date: DateTime.now(),
+        name: '${first} ${last}',
+        points: 0,
+        id: '${nextPlayerId}',
+        emoji: '🏓',
+        achievements: {
+          'cup': [],
+          'season': [],
+        },
+        ),
+      );
+  }
+
   void resetSeason(){
     _playerBio.forEach((player){
       player.points = 0;

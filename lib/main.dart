@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               child: SplashScreen.navigate(
                 name: 'assets/animations/intro_anim.flr',
-                next: HomePage(),
+                next: HomeScreen(),
                 until: () => Future.delayed(Duration(milliseconds: 5500)),
                 startAnimation: 'splash',
                 backgroundColor: Color(0xfffcfcfc),

@@ -1,4 +1,4 @@
-package com.example.tournament_app;
+package com.example.racket_slammers;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
