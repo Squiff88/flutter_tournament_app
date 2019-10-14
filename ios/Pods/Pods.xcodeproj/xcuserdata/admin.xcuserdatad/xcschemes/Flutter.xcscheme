@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42A603F211A411E628C1409DB50F2BDC"
+               BlueprintIdentifier = "1EFDDC32A34D56D411E640A81DCD9E73"
                BuildableName = "Flutter"
                BlueprintName = "Flutter"
                ReferencedContainer = "container:Pods.xcodeproj">

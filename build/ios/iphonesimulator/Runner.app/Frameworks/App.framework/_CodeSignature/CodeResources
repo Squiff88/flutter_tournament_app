@@ -10,7 +10,7 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		yxIinPrS3Q4fEp4mWxG3amXLJtk=
+		xKc77VXcSiY+O6I9wkAeGRLG/Yk=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>flutter_assets/LICENSE</key>
 		<data>
-		l/iJsErV97rlb2S2AAUEtoKyRSc=
+		5R55RQVK6ZRHXV9zyyYAIB+dKMg=
 		</data>
 		<key>flutter_assets/assets/animations/intro_anim.flr</key>
 		<data>
@@ -44,6 +44,10 @@
 		<data>
 		c2scKI8raWNv3iWCwq8UJXI1ryA=
 		</data>
+		<key>flutter_assets/assets/images/info_avatar.gif</key>
+		<data>
+		1NBFcWzmk5iiIFFbF8QHXmA3fZA=
+		</data>
 		<key>flutter_assets/assets/images/table_tennis.jpg</key>
 		<data>
 		wkr+/vjGB+oDfeWdbz4ilUffWSU=
@@ -58,7 +62,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		OdO0sqdqhNTBHVyeWLwGz8PjDWM=
+		epsoBxaEyQ0dXh5GJaBdYMQK7S0=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -75,11 +79,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yxIinPrS3Q4fEp4mWxG3amXLJtk=
+			xKc77VXcSiY+O6I9wkAeGRLG/Yk=
 			</data>
 			<key>hash2</key>
 			<data>
-			jA20miFXeXnv7Wx0KkY8cN5UtM01kHFY4P1FyryE8iM=
+			SUMELWh3g5i2iuBuQcz3PtmN0vwDKsZ49xgVPzkRAoY=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -97,11 +101,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			l/iJsErV97rlb2S2AAUEtoKyRSc=
+			5R55RQVK6ZRHXV9zyyYAIB+dKMg=
 			</data>
 			<key>hash2</key>
 			<data>
-			/QUEkjEFMgQVRk2zjNP+0civvX36I3mu75yaOTzEsSA=
+			V73Tn9XakAob6RyNk5giJTkM/AzaTRrL6yespdjSs5s=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/animations/intro_anim.flr</key>
@@ -170,6 +174,17 @@
 			m+qk1XEDbyDajrfGvad/2Yw+ZA/Yu5chVL2vQwwAN0k=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/info_avatar.gif</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1NBFcWzmk5iiIFFbF8QHXmA3fZA=
+			</data>
+			<key>hash2</key>
+			<data>
+			rlb+IUkqMz0PKdFsr3+R5q/z1/YrkAAgHAxJfBGoQrE=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/table_tennis.jpg</key>
 		<dict>
 			<key>hash</key>
@@ -207,11 +222,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OdO0sqdqhNTBHVyeWLwGz8PjDWM=
+			epsoBxaEyQ0dXh5GJaBdYMQK7S0=
 			</data>
 			<key>hash2</key>
 			<data>
-			Hscr2IAqg92eqFB0QxiqiJAxpdERNISwR3taqwSWMoA=
+			uABAZOWGaBTcGATqPR30hFEj90h+db9gKQH/LAuwOy4=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

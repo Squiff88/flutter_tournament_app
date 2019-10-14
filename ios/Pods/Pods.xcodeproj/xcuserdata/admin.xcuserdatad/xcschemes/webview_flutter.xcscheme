@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "006F7610B7E7025B6E172119AA02609F"
+               BlueprintIdentifier = "C62825B628631BFD7AD90BF817C32BF6"
                BuildableName = "libwebview_flutter.a"
                BlueprintName = "webview_flutter"
                ReferencedContainer = "container:Pods.xcodeproj">
