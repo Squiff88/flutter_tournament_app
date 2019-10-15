@@ -4,10 +4,16 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/tournament_info.dart';
 import './store/player_bio_model.dart';
 import './store/tournament_info_model.dart';
+import 'package:flutter/services.dart';
 
 import './screens/home_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+      runApp(new MyApp());
+    });
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
