@@ -1,1 +1,5 @@
 **/android/key.properties
+**/android/.gradle
+**/android/captures/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
