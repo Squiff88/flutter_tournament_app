@@ -188,14 +188,18 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
 
     return Scaffold(
       appBar: GradientAppBar(
-          title: Text(
-            'Slammer\'s Cup',
-            style: TextStyle(
-                fontFamily: AppTheme.FontFamilies.regular,
-                fontWeight: FontWeight.w600,
-                fontSize: 27),
+          title: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: Text(
+              'Slammer\'s Cup',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: AppTheme.FontFamilies.regular,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 27),
+            ),
           ),
-          gradient: AppTheme.AppBarColor.linear),
+      gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
@@ -347,7 +351,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                 if (startCup)
                   Container(
                     margin: EdgeInsets.only(top: 30),
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.35,
                     child: CupMatchScreen(
                       cupPlayers: seededPlayers,
                       invokeNextRound: nextRound,

@@ -7,6 +7,7 @@ import 'package:tournament_app/models/player_bio.dart';
 import 'package:tournament_app/screens/deathmatch_screen.dart';
 import 'package:tournament_app/screens/season_winner_screen.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
+import 'dart:io';
 import '../theme/theme.dart' as AppTheme;
 
 class CupMatchScreen extends StatefulWidget {
@@ -174,9 +175,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
             newRound = false;
           });
 
-          // widget.invokeNextRound(winnersList);
-          // winnersList = List();
-
           routeToWinner();
           return null;
         }
@@ -297,9 +295,9 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Flexible(
-                      flex: 2,
+                      flex: 3,
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
                           children: widget.cupPlayers['leftSide']
@@ -323,12 +321,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                   index,
                                   GestureDetector(
                                     onTap: isMatchPlayed ? (){} : (){
-
-                                      print(player);
-                                      print(losersList);
-                                      print('losersList....');
-
-
 
                                       if(losersList.contains(player)){
                                         print('alredy player loser...');
@@ -395,9 +387,11 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                       ? "${rightScoreNew[index]}"
                                       : "${rightScore[index]}";
 
+                                  
+                                  updateMatchScore(deathmatchScore, player, index);
 
-                                       updateMatchScore(
-                                      deathmatchScore, player, index);
+
+                                  double platformMargin = Platform.isIOS ? 21 : 15 ;
 
                                   bool isMatchPlayed = matchPlayed(player);
 
@@ -423,7 +417,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                       child: Container(
                                         width: double.infinity,
                                         alignment: Alignment.center,
-                                        margin: EdgeInsets.only(top: 21),
+                                        margin: EdgeInsets.only(top: platformMargin),
                                         child: Text(
                                           '${leftScoreCurrent}'
                                           ' : '
@@ -442,10 +436,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                       ),
                     ),
                     Flexible(
-                      flex: 2,
+                      flex: 3,
                       child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: widget.cupPlayers['rightSide']
                               .asMap()
                               .map((index, player) {
