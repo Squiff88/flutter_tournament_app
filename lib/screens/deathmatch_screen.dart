@@ -43,14 +43,13 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
 
   Timer _timer;
 
-
   void goBackDelayed() {
     _timer = new Timer(const Duration(milliseconds: 100), () {
       Navigator.pop(context);
     });
   }
 
- @override
+  @override
   void dispose() {
     super.dispose();
     _timer.cancel();
@@ -61,9 +60,8 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
     final String playerOponent = deathMatchOponent(
         widget._cupPlayers, widget._deatchMatchPlayer, widget._playerIndex);
 
-
-    bool playerLeftSide = widget._cupPlayers['leftSide'].contains(widget._deatchMatchPlayer);
-
+    bool playerLeftSide =
+        widget._cupPlayers['leftSide'].contains(widget._deatchMatchPlayer);
 
     List initPlayerLeft;
     String playerLeftName;
@@ -73,7 +71,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
     String playerRightName;
     String playerRightEmoji;
 
-    if(playerLeftSide){
+    if (playerLeftSide) {
       // left player name and emoji
       initPlayerLeft = widget._deatchMatchPlayer.split(' ');
       playerLeftName = initPlayerLeft[1] + '\n' + initPlayerLeft[2];
@@ -83,9 +81,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
       initPlayerRight = playerOponent.split(' ');
       playerRightName = initPlayerRight[1] + '\n' + initPlayerRight[2];
       playerRightEmoji = initPlayerRight[0];
-
-    }else{
-      
+    } else {
       // right player name and emoji
       initPlayerRight = widget._deatchMatchPlayer.split(' ');
       playerRightName = initPlayerRight[1] + '\n' + initPlayerRight[2];
@@ -97,28 +93,26 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
       playerLeftEmoji = initPlayerLeft[0];
     }
 
-
     if (playerLeftScore == 11) {
       final matchInfo = {
         'winner': {
           'name': playerLeftName,
           'emoji': playerLeftEmoji,
           'score': playerLeftScore,
-          'side' : 'leftSide',
+          'side': 'leftSide',
           'index': widget._playerIndex
         },
         'loser': {
           'name': playerRightName,
           'emoji': playerRightEmoji,
           'score': playerRightScore,
-          'side' : 'rightSide',
+          'side': 'rightSide',
           'index': widget._playerIndex
         }
       };
 
       widget._getWinner(matchInfo);
       goBackDelayed();
-
     }
 
     if (playerRightScore == 11) {
@@ -127,30 +121,27 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
           'name': playerRightName,
           'emoji': playerRightEmoji,
           'score': playerRightScore,
-          'side' : 'rightSide',
+          'side': 'rightSide',
           'index': widget._playerIndex
-
         },
         'loser': {
           'name': playerLeftName,
           'emoji': playerLeftEmoji,
           'score': playerLeftScore,
-          'side' : 'leftSide',
+          'side': 'leftSide',
           'index': widget._playerIndex
-
         }
       };
-
 
       widget._getWinner(matchInfo);
 
       goBackDelayed();
-
     }
 
     return Scaffold(
       appBar: GradientAppBar(
-          title: Text('Slammers Deathmatch'), gradient: AppTheme.AppBarColor.linear),
+          title: Text('Slammers Deathmatch'),
+          gradient: AppTheme.AppBarColor.linear),
       body: Container(
         // color: Colors.white,
         width: double.infinity,
@@ -266,9 +257,9 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                       : AppTheme.AppColors.fire,
                                   // color: Colors.red,
 
-                                  spreadRadius: playerLeftFlash ? 10 : 8,
+                                  spreadRadius: playerLeftFlash ? 10 : 5,
                                   offset: Offset(
-                                      15.0,
+                                      5.0,
                                       playerLeftFlash
                                           ? (MediaQuery.of(context)
                                                   .size
@@ -378,7 +369,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                       : AppTheme.AppColors.sand,
                                   // color: Colors.red,
 
-                                  spreadRadius: playerRightFlash ? 10 : 8,
+                                  spreadRadius: playerRightFlash ? 10 : 5,
                                   offset: Offset(
                                       0.0,
                                       playerRightFlash
