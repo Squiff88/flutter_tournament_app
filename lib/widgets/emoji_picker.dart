@@ -43,9 +43,9 @@ class _AwesomeEmojiPickerState extends State<AwesomeEmojiPicker> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: EmojiPicker(
-                      rows: 5,
-                      columns: 7,
-                      numRecommended: 7,
+                      rows: 6,
+                      columns: 8,
+                      numRecommended: 8,
                       buttonMode: ButtonMode.MATERIAL,
                       selectedCategory: Category.ANIMALS,
                       onEmojiSelected: (emoji, category) {

@@ -12,6 +12,8 @@ import '../store/player_bio_model.dart';
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
 import '../widgets/action_button.dart';
+
+import 'package:logger/logger.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class HomeScreen extends StatefulWidget {
@@ -31,10 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    //init pretty logs
+    var logger = Logger(printer: PrettyPrinter(colors: true,));
+
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
 
   Future<String> infoReminder(message) async {
+
     var popupMessage = message;
+
+logger.v("Verbose log");
+
+logger.d("Debug log");
+
+logger.i("Info log");
+
+logger.w("Warning log");
+
+logger.e("Error log");
+
+logger.wtf("What a terrible failure log");
+
     switch (await showDialog(
         context: context,
         builder: (BuildContext context) {
