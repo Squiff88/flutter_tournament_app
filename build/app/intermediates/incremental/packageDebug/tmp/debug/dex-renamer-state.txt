@@ -1,4 +1,4 @@
-#Fri Oct 18 14:03:35 CEST 2019
+#Fri Oct 18 16:03:34 CEST 2019
 base.0=/Users/admin/Desktop/Flutter/Course_App/flutter_tournament_app/build/app/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex
