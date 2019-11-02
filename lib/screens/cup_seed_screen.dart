@@ -88,11 +88,18 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   }
 
   _showReportDialog(List<PlayerBio> players) {
+
+
+    print(players);
+    print(' in dialog ...............players');
     showDialog(
         context: context,
         builder: (BuildContext context) {
           int playersLen = players.length;
           bool longList = playersLen > 8;
+
+          print(playersLen);
+          print('playersLen');
           return Container(
             // color: Colors.blue,
             height: longList ? 400 : 320,
@@ -214,7 +221,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
         ),
         child: ScopedModelDescendant<PlayerBioModel>(
           builder: (context, child, model) {
-            final List<PlayerBio> players = model.playerBio;
+            final List<PlayerBio> players = model.getPlayers;
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -315,8 +322,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             icon: Icon(Icons.done_all),
                             onPressed: () {
                               final newPlayes = cupDraw(shuffledPlayers);
-                              print(newPlayes['fail'] );
-                              print('newPlayes');
+   
 
                               if (newPlayes['fail'] != null && newPlayes['fail'].length > 0) {
                                 return messageDialog(newPlayes['fail']);

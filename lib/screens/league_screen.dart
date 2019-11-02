@@ -67,7 +67,9 @@ class _LeagueScreenState extends State<LeagueScreen> {
             ScopedModelDescendant<PlayerBioModel>(
               builder: (context, child, model) {
                 return Column(
-                  children: model.playerBio
+                  children: <Widget> [ Container(
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: ListView(children: model.getPlayers
                       .asMap()
                       .map((index, info) {
                         String updatedPoints = playerPoints != null
@@ -86,7 +88,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                model.selectPlayer(model.playerBio[index].id);
+                                model.selectPlayer(model.getPlayers[index].id);
                                 Navigator.push(
                                     context,
                                     PageTransition(
@@ -105,7 +107,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                                     width: MediaQuery.of(context).size.width * 0.2,
 
                                     child: AwesomeEmojiPicker(
-                                        playerEmoji: model.playerBio[index].emoji,
+                                        playerEmoji: model.getPlayers[index].emoji,
                                         playerId: info.id),
                                   ),
                                   Container(
@@ -141,6 +143,10 @@ class _LeagueScreenState extends State<LeagueScreen> {
                       })
                       .values
                       .toList(),
+
+                    ),
+                  )],
+                  
                 );
               },
             ),
@@ -178,7 +184,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                               final firstPlayer =
                                   ScopedModel.of<PlayerBioModel>(context,
                                           rebuildOnChange: true)
-                                      .playerBio;
+                                      .getPlayers;
                               final PlayerBio winner = firstPlayer.elementAt(0);
                               Navigator.push(
                                   context,

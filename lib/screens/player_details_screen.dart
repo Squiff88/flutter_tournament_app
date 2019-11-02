@@ -47,6 +47,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                   },
                 ),
               ],
+
             );
           })) {
         case 'No':
@@ -254,7 +255,11 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                               ScopedModel.of<PlayerBioModel>(context,
                                       rebuildOnChange: true)
                                   .deletePlayer(playerId);
+                              Navigator.of(context).pop();
                             }
+                          }).catchError((error){
+                            print(error);
+                            print('deleting player error');
                           });
                         },
                       ),

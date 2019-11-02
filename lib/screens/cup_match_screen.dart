@@ -274,7 +274,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       width: double.infinity,
       child: ScopedModelDescendant<PlayerBioModel>(
         builder: (context, child, model) {
-          final List<PlayerBio> players = model.playerBio;
+          final List<PlayerBio> players = model.getPlayers;
 
           return Container(
             alignment: Alignment.center,

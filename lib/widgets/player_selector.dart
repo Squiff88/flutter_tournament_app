@@ -18,16 +18,15 @@ class _PlayerSelectorState extends State<PlayerSelector> {
   List<Map<String, String>> selectedChoices = List();
 
 
-
-
   _buildChoiceList() {
 
     List<Widget> choices = List();
-    widget.players.forEach((item) {
+    widget.players.forEach((PlayerBio item ) {
 
       final String playerName = item.name;
       final String firstName = playerName.split(' ')[0].split('')[0];
       final String lastName = playerName.split(' ')[1].split('')[0];
+
 
       Iterable<Map<String, String>> searchList = selectedChoices.where((selectPlayer) {
         return selectPlayer['name'].contains(item.name);
@@ -37,10 +36,7 @@ class _PlayerSelectorState extends State<PlayerSelector> {
         return arr.containsValue(item.name);
       }).toString();
 
-   
-
-
-
+  
       // FUNCTION TO EXTEND PLAYER PICKER FUNCTIONALITY ,
       // DETERMINE WHICH PLAYERS WERE ADDED ...
 
