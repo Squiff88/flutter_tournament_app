@@ -1,6 +1,9 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/player_bio.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class PlayerBioModel extends Model {
   List<PlayerBio> _playerBio = [
     PlayerBio(
@@ -111,17 +114,12 @@ class PlayerBioModel extends Model {
     var players = _playerBio.length;
     var nextPlayerId = players;
 
-    print(first);
-    print(last);
-    print(nextPlayerId);
-    print('info .......');
-
     _playerBio.add(
       PlayerBio(
         date: DateTime.now(),
-        name: '${first} ${last}',
+        name: first + ' ' +  last,
         points: 0,
-        id: '${nextPlayerId}',
+        id: nextPlayerId.toString(),
         emoji: '🏓',
         achievements: {
           'cup': [],
@@ -129,6 +127,21 @@ class PlayerBioModel extends Model {
         },
         ),
       );
+
+    const url = 'https://slammers-7bbd0.firebaseio.com/players.json';
+    final timeCreated = DateTime.now();
+    http.post(url, body: json.encode({
+      "date": timeCreated.toString(),
+      "name": first + ' ' + last,
+      "points": 0,
+      "id": nextPlayerId.toString(),
+      "emoji": '🏓',
+      "achievements": {
+          'cup': [],
+          'season': [],
+        }
+    }),);
+
   }
 
   void resetSeason(){

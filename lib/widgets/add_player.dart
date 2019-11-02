@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:tournament_app/models/player_bio.dart';
-import '../models/player_bio.dart';
 import '../store/player_bio_model.dart';
 
 // Create a Form widget.
@@ -45,6 +43,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                 if (firstNameValue.isEmpty) {
                   return 'Please enter some text';
                 }
+                return null;
+
               },
               onSaved:  (firstNameValue) => setState(() => first = firstNameValue),
             ),
@@ -61,6 +61,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 if (lastNameValue.isEmpty) {
                   return 'Please enter your last name';
                 }
+                return null;
               },
               onSaved:  (lastNameValue) => setState(() => last = lastNameValue),
             ),

@@ -106,7 +106,7 @@ logger.wtf("What a terrible failure log");
         builder: (BuildContext context) {
           return SimpleDialog(
             title: Text(
-              '${popupMessage}',
+              popupMessage,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.curvy,
@@ -254,7 +254,7 @@ logger.wtf("What a terrible failure log");
                                     fontFamily: AppTheme.FontFamilies.regular)),
                             onPressed: () {
                               messageDialog('Slam it !');
-                        
+      
                             },
                           ),
                         ),
