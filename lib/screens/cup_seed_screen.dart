@@ -126,7 +126,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                       final String playerEmoji = item['emoji'];
                       final String playerName = item['name'];
 
-                      return '${playerEmoji} ${playerName}';
+                      return playerEmoji + ' ' + playerName;
                     }).toList();
 
                     setState(() {

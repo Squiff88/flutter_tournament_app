@@ -24,8 +24,8 @@ class _PlayerSelectorState extends State<PlayerSelector> {
     widget.players.forEach((PlayerBio item ) {
 
       final String playerName = item.name;
-      final String firstName = playerName.split(' ')[0].split('')[0];
-      final String lastName = playerName.split(' ')[1].split('')[0];
+      final String firstName = playerName.split(' ')[0].split('')[0].toUpperCase().substring(0);
+      final String lastName = playerName.split(' ')[1].split('')[0].toUpperCase().substring(0);
 
 
       Iterable<Map<String, String>> searchList = selectedChoices.where((selectPlayer) {

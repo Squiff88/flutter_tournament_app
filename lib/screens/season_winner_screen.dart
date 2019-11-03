@@ -25,7 +25,7 @@ class SeasonWinner extends StatelessWidget {
     return Scaffold(
         appBar: GradientAppBar(
           title: Text(
-            '${title} ${currentSeason}',
+            title + ' ' + currentSeason,
             style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.regular,
                 fontWeight: FontWeight.w700,

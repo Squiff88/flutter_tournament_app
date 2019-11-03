@@ -235,7 +235,7 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 12),
-                                  child: Text('${playerLeftScore}',
+                                  child: Text(playerLeftScore.toString(),
                                       style: TextStyle(
                                           fontSize: 30,
                                           fontFamily:

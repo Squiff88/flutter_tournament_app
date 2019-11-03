@@ -48,8 +48,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                       }
                       return null;
                     },
-                    onSaved: (firstNameValue) =>
-                        setState(() => _first = firstNameValue),
+                    onSaved: (firstNameValue){
+                      var firstName = firstNameValue.split(' ').join('');
+                      var firstNameCamel = firstName[0].toUpperCase() + firstName.substring(1);
+                        setState(() => _first = firstNameCamel);
+                    }
                   ),
                 ),
                 Container(
@@ -64,8 +67,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                       }
                       return null;
                     },
-                    onSaved: (lastNameValue) =>
-                        setState(() => _last = lastNameValue),
+                    onSaved: (lastNameValue) {
+                      var lastName = lastNameValue.split(' ').join('');
+                      var lastNameCamel = lastName[0].toUpperCase() + lastName.substring(1);
+                        setState(() {
+                           _last = lastNameCamel;
+                          }
+                        );}
                   ),
                 ),
                 Padding(

@@ -24,12 +24,26 @@ class _HomeScreenState extends State<HomeScreen> {
   int playerPoints;
   int seasonCounter = 0;
   Timer _timer;
+  bool loadingPlayers = false;
+  bool loadingPlayersError = false;
 
   @override
   void initState() {
     super.initState();
-
-    ScopedModel.of<PlayerBioModel>(context).fetchPlayers();
+    setState(() {
+      loadingPlayers = true;
+    });
+    ScopedModel.of<PlayerBioModel>(context).fetchPlayers()
+    .catchError((error){
+      setState(() {
+        loadingPlayersError = true;
+        loadingPlayers = false;
+      });
+    }).then((_){
+      setState(() {
+        loadingPlayers = false;
+      });
+    });
 
     final scopedReminder =
         ScopedModel.of<PlayerBioModel>(context).reminderAccepted;
@@ -44,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   'assets/images/info_avatar.gif',
                   fit: BoxFit.scaleDown,
                   width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height * 0.3,
                 ),
                 SimpleDialogOption(
                   onPressed: () {
@@ -83,7 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Future<String> messageDialog(message) async {
       var popupMessage = message;
       switch (await showDialog(
@@ -138,120 +150,130 @@ class _HomeScreenState extends State<HomeScreen> {
               fit: BoxFit.scaleDown,
               alignment: Alignment.bottomRight),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Text(
-                'Welcome Racket Slammers!',
-                style: TextStyle(
-                    fontSize: 30, fontFamily: AppTheme.FontFamilies.curvy),
-              ),
-            ),
-            ScopedModelDescendant<PlayerBioModel>(
-              builder: (context, child, model) {
-                return Column(children: <Widget>[
+        child: this.loadingPlayers
+            ? Center(child: CircularProgressIndicator())
+            : this.loadingPlayersError ? Center(child: Text('Something went wrong'),)
+            :
+            
+            Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:  <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.55,
-                    child: ListView(
-                      children: model.getPlayers
-                          .asMap()
-                          .map((index, info) {
-                            String updatedPoints = playerPoints != null
-                                ? playerPoints.toString()
-                                : info.points.toString();
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    child: Text(
+                      'Welcome Racket Slammers!',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: AppTheme.FontFamilies.curvy),
+                    ),
+                  ),
+                  ScopedModelDescendant<PlayerBioModel>(
+                    builder: (context, child, model) {
+                      return Column(children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.55,
+                          child: ListView(
+                            children: model.getPlayers
+                                .asMap()
+                                .map((index, info) {
+                                  String updatedPoints = playerPoints != null
+                                      ? playerPoints.toString()
+                                      : info.points.toString();
 
-                            return MapEntry(
-                              index,
+                                  return MapEntry(
+                                    index,
+                                    Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(top: 10),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.black, width: 1)),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          model.selectPlayer(
+                                              model.getPlayers[index].id);
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                type: PageTransitionType
+                                                    .rightToLeftWithFade,
+                                                curve: Curves.easeInOutSine,
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                duration:
+                                                    Duration(milliseconds: 350),
+                                                child: PlayerDetails(
+                                                    this.seasonCounter),
+                                              ));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            AwesomeEmojiPicker(
+                                                playerEmoji: model
+                                                    .getPlayers[index].emoji,
+                                                playerId: info.id,
+                                                playerName: info.name),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                })
+                                .values
+                                .toList(),
+                          ),
+                        )
+                      ]);
+                    },
+                  ),
+                  ScopedModel(
+                    model: TournamentInfoModel(),
+                    child: Container(
+                      child: ScopedModelDescendant<TournamentInfoModel>(
+                          builder: (context, child, model) {
+                        return Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
                               Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.black, width: 1)),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    model.selectPlayer(
-                                        model.getPlayers[index].id);
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          type: PageTransitionType
-                                              .rightToLeftWithFade,
-                                          curve: Curves.easeInOutSine,
-                                          alignment: Alignment.bottomRight,
-                                          duration: Duration(milliseconds: 350),
-                                          child:
-                                              PlayerDetails(this.seasonCounter),
-                                        ));
+                                margin: EdgeInsets.only(top: 25),
+                                // height: MediaQuery.of(context).size.height * 0.05,
+                                child: RaisedButton(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(15.0)),
+                                  color: AppTheme.AppColors.fire.withGreen(140),
+                                  child: Text('Add Slammer',
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily:
+                                              AppTheme.FontFamilies.regular)),
+                                  onPressed: () {
+                                    messageDialog('Slam it !');
                                   },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      AwesomeEmojiPicker(
-                                          playerEmoji:
-                                              model.getPlayers[index].emoji,
-                                          playerId: info.id,
-                                          playerName: info.name),
-                                    ],
-                                  ),
                                 ),
                               ),
-                            );
-                          })
-                          .values
-                          .toList(),
-                    ),
-                  )
-                ]);
-              },
-            ),
-            ScopedModel(
-              model: TournamentInfoModel(),
-              child: Container(
-                child: ScopedModelDescendant<TournamentInfoModel>(
-                    builder: (context, child, model) {
-                  return Flexible(
-                    fit: FlexFit.tight,
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 25),
-                          // height: MediaQuery.of(context).size.height * 0.05,
-                          child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 5),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
-                            color: AppTheme.AppColors.fire.withGreen(140),
-                            child: Text('Add Slammer',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: AppTheme.FontFamilies.regular)),
-                            onPressed: () {
-                              messageDialog('Slam it !');
-                            },
+                            ],
                           ),
-                        ),
-                      ],
+                        );
+                      }),
                     ),
-                  );
-                }),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
