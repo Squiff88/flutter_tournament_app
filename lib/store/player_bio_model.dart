@@ -119,8 +119,10 @@ class PlayerBioModel extends Model {
     final List<PlayerBio> playersList = [];
     return http.get(url).then((response){
       final result = json.decode(response.body) as Map<String , dynamic>;
+      print(result);
+      print('result');
+      if(result != null && result.length > 0){
       result.forEach((key , val){
-
         playersList.add(PlayerBio(
           id: key,
           emoji: val['emoji'],
@@ -128,11 +130,8 @@ class PlayerBioModel extends Model {
           points: val['points'],
           date: DateTime.parse(val['date']),
         ));
-
-
       });
-
-      logger.v(playersList[0].name);
+      }
 
       _playerBio = playersList;
 
@@ -217,21 +216,46 @@ class PlayerBioModel extends Model {
     notifyListeners();
   }
 
-  void deletePlayer(String id) {
-    this.selectPlayer(id);
 
-    _playerBio.removeWhere((player) => player.id == id);
+  Future<void> deletePlayer(String id) {
+    
+    // this.selectPlayer(id);
+
+    final playerID = selectedPlayer.id;
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+
+
+    return http.delete(url).then((_){
+    _playerBio.removeWhere((selectedPlayer) => selectedPlayer.id == id);
     _playerBio.join(', ');
+        notifyListeners();
+    });
   }
 
-  void changePlayerPoints(int points) {
-    selectedPlayer.points = points;
-    notifyListeners();
+
+  Future<void> changePlayerPoints(int points) {
+    final playerID = selectedPlayer.id;
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+
+    return http.patch(url, body: json.encode(({
+      "points": points
+    }))).then((_){
+        selectedPlayer.points = points;
+        notifyListeners();
+    });
   }
 
-  void changePlayerEmoji(String emoji) {
-    selectedPlayer.emoji = emoji;
-    notifyListeners();
+  Future<void> changePlayerEmoji(String emoji) {
+    final playerID = selectedPlayer.id;
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+
+    return http.patch(url, body: json.encode(({
+      "emoji": emoji
+    }))).then((_){
+        selectedPlayer.emoji = emoji;
+        notifyListeners();
+    });
+
   }
 
   PlayerBio get selectedPlayer => _playerBio[_selected];

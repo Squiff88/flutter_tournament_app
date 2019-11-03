@@ -43,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ScopedModel.of<PlayerBioModel>(context)
           .fetchPlayers()
           .catchError((error) {
+            print(error);
+            print('home screen error');
         setState(() {
           loadingPlayersError = true;
           loadingPlayers = false;
@@ -163,6 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: RefreshIndicator(
           onRefresh: () => refreshPlayers(context).catchError((error) {
+            print(error);
+            print('home screen redresh error');
             setState(() {
               loadingPlayersError = true;
               loadingPlayers = false;

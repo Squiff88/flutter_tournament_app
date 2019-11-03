@@ -18,6 +18,11 @@ class PlayerDetails extends StatefulWidget {
 }
 
 class _PlayerDetailsState extends State<PlayerDetails> {
+
+  bool incrementPoints = false;
+  bool decrementPoints = false;
+  bool loadingPlayersError = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -192,10 +197,19 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                             child: FlatButton(
                               color: Colors.transparent,
                               onPressed: () {
-                                model.changePlayerPoints(player.points - 1);
+                                setState(() {
+                                  this.decrementPoints = true;
+                                });
+                                model.changePlayerPoints(player.points - 1)
+                                .catchError((error){
+                                  setState(() => this.decrementPoints = false);
+                                })
+                                .then((_){
+                                  setState(() => this.decrementPoints = false);
+                                });
                               },
                               padding: EdgeInsets.all(0),
-                              child: Text(
+                              child: this.decrementPoints ? Center(child: CircularProgressIndicator(),) : Text(
                                 '-',
                                 style: TextStyle(
                                     fontFamily: 'KaushanScript-Regular',
@@ -209,10 +223,19 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                             child: FlatButton(
                               color: Colors.transparent,
                               onPressed: () {
-                                model.changePlayerPoints(player.points + 1);
+                                setState(() {
+                                  this.incrementPoints = true;
+                                });
+                                model.changePlayerPoints(player.points + 1)
+                                .catchError((error){
+                                  setState(() => this.incrementPoints= false);
+                                })
+                                .then((_){
+                                  setState(() => this.incrementPoints = false);
+                                });
                               },
                               padding: EdgeInsets.all(0),
-                              child: Text(
+                              child: this.incrementPoints ? Center(child: CircularProgressIndicator(),) : Text(
                                 '+',
                                 style: TextStyle(
                                     fontFamily: 'KaushanScript-Regular',
