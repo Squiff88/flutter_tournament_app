@@ -11,6 +11,7 @@ import '../store/player_bio_model.dart';
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
 import '../widgets/action_button.dart';
+import '../helpers/pull_refresh.dart';
 
 import '../theme/theme.dart' as AppTheme;
 
@@ -30,20 +31,30 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      loadingPlayers = true;
-    });
-    ScopedModel.of<PlayerBioModel>(context).fetchPlayers()
-    .catchError((error){
+
+    final totalPlayers = ScopedModel.of<PlayerBioModel>(context).getPlayers;
+    print(totalPlayers);
+    print('totalPlayers.......');
+    if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
-        loadingPlayersError = true;
-        loadingPlayers = false;
+        loadingPlayers = true;
       });
-    }).then((_){
-      setState(() {
-        loadingPlayers = false;
+
+      ScopedModel.of<PlayerBioModel>(context)
+          .fetchPlayers()
+          .catchError((error) {
+        setState(() {
+          loadingPlayersError = true;
+          loadingPlayers = false;
+        });
+      }).then((_) {
+        setState(() {
+          loadingPlayers = false;
+        });
       });
-    });
+    }
+
+    ScopedModel.of<PlayerBioModel>(context).getPlayers;
 
     final scopedReminder =
         ScopedModel.of<PlayerBioModel>(context).reminderAccepted;
@@ -150,130 +161,158 @@ class _HomeScreenState extends State<HomeScreen> {
               fit: BoxFit.scaleDown,
               alignment: Alignment.bottomRight),
         ),
-        child: this.loadingPlayers
-            ? Center(child: CircularProgressIndicator())
-            : this.loadingPlayersError ? Center(child: Text('Something went wrong'),)
-            :
-            
-            Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:  <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    child: Text(
-                      'Welcome Racket Slammers!',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: AppTheme.FontFamilies.curvy),
-                    ),
-                  ),
-                  ScopedModelDescendant<PlayerBioModel>(
-                    builder: (context, child, model) {
-                      return Column(children: <Widget>[
+        child: RefreshIndicator(
+          onRefresh: () => refreshPlayers(context).catchError((error) {
+            setState(() {
+              loadingPlayersError = true;
+              loadingPlayers = false;
+            });
+          }).then((_) {
+            setState(() {
+              loadingPlayers = false;
+            });
+          }),
+          child: this.loadingPlayers
+              ? Center(child: CircularProgressIndicator())
+              : this.loadingPlayersError
+                  ? Center(
+                      child: Text('Something went wrong'),
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.55,
-                          child: ListView(
-                            children: model.getPlayers
-                                .asMap()
-                                .map((index, info) {
-                                  String updatedPoints = playerPoints != null
-                                      ? playerPoints.toString()
-                                      : info.points.toString();
-
-                                  return MapEntry(
-                                    index,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: Text(
+                            'Welcome Racket Slammers!',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: AppTheme.FontFamilies.curvy),
+                          ),
+                        ),
+                        ScopedModelDescendant<PlayerBioModel>(
+                          builder: (context, child, model) {
+                            return Column(children: <Widget>[
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                child: ListView(
+                                  children: model.getPlayers
+                                      .asMap()
+                                      .map((index, info) {
+                                        return MapEntry(
+                                          index,
+                                          Container(
+                                            width: double.infinity,
+                                            margin: EdgeInsets.only(top: 10),
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1)),
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                model.selectPlayer(
+                                                    model.getPlayers[index].id);
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                      type: PageTransitionType
+                                                          .rightToLeftWithFade,
+                                                      curve:
+                                                          Curves.easeInOutSine,
+                                                      alignment:
+                                                          Alignment.bottomRight,
+                                                      duration: Duration(
+                                                          milliseconds: 350),
+                                                      child: PlayerDetails(
+                                                          this.seasonCounter),
+                                                    ));
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  AwesomeEmojiPicker(
+                                                      playerEmoji: model
+                                                          .getPlayers[index]
+                                                          .emoji,
+                                                      playerId: info.id,
+                                                      playerName: info.name),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      })
+                                      .values
+                                      .toList(),
+                                ),
+                              )
+                            ]);
+                          },
+                        ),
+                        ScopedModel(
+                          model: TournamentInfoModel(),
+                          child: Stack(children: <Widget>[
+                            if(!loadingPlayers && !loadingPlayersError)
+                              Container(
+                                child: Text(''),
+                                alignment: Alignment.topCenter,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.white,
+                                          offset: Offset(5.0, -12.0),
+                                          blurRadius: 15,
+                                          spreadRadius: 5)
+                                    ]),
+                              ),
+                            Container(
+                              child: ScopedModelDescendant<TournamentInfoModel>(
+                                  builder: (context, child, model) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
                                     Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(top: 10),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.black, width: 1)),
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          model.selectPlayer(
-                                              model.getPlayers[index].id);
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                type: PageTransitionType
-                                                    .rightToLeftWithFade,
-                                                curve: Curves.easeInOutSine,
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                duration:
-                                                    Duration(milliseconds: 350),
-                                                child: PlayerDetails(
-                                                    this.seasonCounter),
-                                              ));
+                                      margin: EdgeInsets.only(top: 25),
+                                      alignment: Alignment.center,
+                                      // height: MediaQuery.of(context).size.height * 0.05,
+                                      child: RaisedButton(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 50, vertical: 5),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        color: AppTheme.AppColors.fire
+                                            .withGreen(140),
+                                        child: Text('Add Slammer',
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: AppTheme
+                                                    .FontFamilies.regular)),
+                                        onPressed: () {
+                                          messageDialog('Slam it !');
                                         },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            AwesomeEmojiPicker(
-                                                playerEmoji: model
-                                                    .getPlayers[index].emoji,
-                                                playerId: info.id,
-                                                playerName: info.name),
-                                          ],
-                                        ),
                                       ),
                                     ),
-                                  );
-                                })
-                                .values
-                                .toList(),
-                          ),
-                        )
-                      ]);
-                    },
-                  ),
-                  ScopedModel(
-                    model: TournamentInfoModel(),
-                    child: Container(
-                      child: ScopedModelDescendant<TournamentInfoModel>(
-                          builder: (context, child, model) {
-                        return Flexible(
-                          fit: FlexFit.tight,
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(top: 25),
-                                // height: MediaQuery.of(context).size.height * 0.05,
-                                child: RaisedButton(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 5),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(15.0)),
-                                  color: AppTheme.AppColors.fire.withGreen(140),
-                                  child: Text('Add Slammer',
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily:
-                                              AppTheme.FontFamilies.regular)),
-                                  onPressed: () {
-                                    messageDialog('Slam it !');
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ]),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
+        ),
       ),
     );
   }
