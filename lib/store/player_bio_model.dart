@@ -218,17 +218,23 @@ class PlayerBioModel extends Model {
 
 
   Future<void> deletePlayer(String id) {
-    
-    // this.selectPlayer(id);
 
     final playerID = selectedPlayer.id;
+    final existingPlayerIndex = _playerBio.indexWhere((selectedPlayer) => selectedPlayer.id == id);
+    final existingPlayer = _playerBio[existingPlayerIndex];
+
     final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
 
-
-    return http.delete(url).then((_){
     _playerBio.removeWhere((selectedPlayer) => selectedPlayer.id == id);
     _playerBio.join(', ');
+    notifyListeners();
+
+    return http.delete(url).then((res){
+      if(res.statusCode >= 400){
+        _playerBio.insert(existingPlayerIndex, existingPlayer);
         notifyListeners();
+
+      }
     });
   }
 

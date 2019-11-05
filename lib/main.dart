@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/tournament_info.dart';
+import 'package:tournament_app/screens/auth_screen.dart';
 import './store/player_bio_model.dart';
 import './store/tournament_info_model.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               child: SplashScreen.navigate(
                 name: 'assets/animations/intro_anim.flr',
-                next: HomeScreen(),
+                next: AuthScreen(),
                 until: () => Future.delayed(Duration(milliseconds: 5500)),
                 startAnimation: 'splash',
                 backgroundColor: Color(0xfffcfcfc),
