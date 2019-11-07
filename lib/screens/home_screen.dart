@@ -33,8 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     final totalPlayers = ScopedModel.of<PlayerBioModel>(context).getPlayers;
-    print(totalPlayers);
-    print('totalPlayers.......');
+    // print(totalPlayers);
+    // print('totalPlayers.......');
     if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
         loadingPlayers = true;
