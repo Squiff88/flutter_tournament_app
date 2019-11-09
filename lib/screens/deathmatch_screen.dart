@@ -153,21 +153,21 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
 
             return Container(
               alignment: Alignment.center,
-              // margin: EdgeInsets.only(top: 20),
+              
               width: double.infinity,
-              // color: Colors.red,
+              
               child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
+                
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
+              
                 children: <Widget>[
                   Container(
                     color: Colors.white,
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: MediaQuery.of(context).size.height,
-                    // color: Colors.amber,
+                    
                     child: GestureDetector(
                       onPanStart: (DragStartDetails details) {
                         initial = details.globalPosition.dx;
@@ -199,52 +199,56 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            // color: Colors.blueAccent,
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(top: 0),
-                            width: MediaQuery.of(context).size.width,
+                            width: double.infinity,
                             height: MediaQuery.of(context).size.height * 0.875,
                             child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 50, 0, 5),
-                                  child: Text(
-                                    playerLeftEmoji,
-                                    style: TextStyle(fontSize: 45),
-                                  ),
-                                ),
-                                Text(
-                                  playerLeftName,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 26,
-                                      fontFamily:
-                                          AppTheme.FontFamilies.slightlyCurvy),
-                                ),
+                                    margin: EdgeInsets.fromLTRB(0, 50, 0, 5),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          playerLeftEmoji,
+                                          style: TextStyle(fontSize: 45),
+                                        ),
+                                        Text(
+                                          playerLeftName,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: AppTheme
+                                                  .FontFamilies.slightlyCurvy),
+                                        ),
+                                      ],
+                                    )),
                                 Container(
-                                  margin: EdgeInsets.only(top: 125),
-                                  child: Text('Score:',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontFamily:
-                                              AppTheme.FontFamilies.regular)),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 12),
-                                  child: Text(playerLeftScore.toString(),
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontFamily:
-                                              AppTheme.FontFamilies.curvy)),
-                                ),
+                                    margin: EdgeInsets.only(top: 125),
+                                    alignment: Alignment.bottomCenter,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text('Score:',
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: AppTheme
+                                                    .FontFamilies.regular)),
+                                        Text(playerLeftScore.toString(),
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: AppTheme
+                                                    .FontFamilies.curvy)),
+                                      ],
+                                    )),
                               ],
                             ),
                             decoration: BoxDecoration(
-                              // color: Colors.black,
                               border: Border(
                                   right: BorderSide(
                                 color: Colors.black.withOpacity(0.04),
@@ -255,21 +259,13 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                                   color: playerLeftFlash
                                       ? Colors.redAccent
                                       : AppTheme.AppColors.fire,
-                                  // color: Colors.red,
-
-                                  spreadRadius: playerLeftFlash ? 10 : 5,
+                                  spreadRadius: playerLeftFlash ? 6 : 5,
                                   offset: Offset(
-                                      5.0,
+                                      0.0,
                                       playerLeftFlash
-                                          ? (MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              140)
-                                          : (MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              115)),
-                                  blurRadius: playerLeftFlash ? 40.0 : 35.0,
+                                          ? (MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.17)
+                                          : (MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.15)),
+                                  blurRadius: playerLeftFlash ? 40.0 : 25.0,
                                 )
                               ],
                             ),
@@ -312,75 +308,66 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
                         }
                       },
                       child: Column(
-                        // textDirection: TextDirection.rtl,
                         mainAxisSize: MainAxisSize.max,
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            // color: Colors.white,
                             alignment: Alignment.center,
                             width: double.infinity,
+                            
                             height: MediaQuery.of(context).size.height * 0.875,
-                            // margin: EdgeInsets.only(top: 1),
-                            // color: Colors.yellow,
                             child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 50, 0, 5),
-                                  child: Text(
-                                    playerRightEmoji,
-                                    style: TextStyle(fontSize: 45),
-                                  ),
-                                ),
-                                Text(
-                                  playerRightName,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 26,
-                                      fontFamily:
-                                          AppTheme.FontFamilies.slightlyCurvy),
-                                ),
+                                  height: MediaQuery.of(context).size.height * 0.2,
+                                    margin: EdgeInsets.fromLTRB(0, 50, 0, 5),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          playerRightEmoji,
+                                          style: TextStyle(fontSize: 45),
+                                        ),
+                                        Text(
+                                          playerRightName,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: AppTheme
+                                                  .FontFamilies.slightlyCurvy),
+                                        ),
+                                      ],
+                                    )),
                                 Container(
-                                  margin: EdgeInsets.only(top: 125),
-                                  child: Text('Score:',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontFamily:
-                                              AppTheme.FontFamilies.regular)),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 12),
-                                  child: Text('${playerRightScore}',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontFamily:
-                                              AppTheme.FontFamilies.curvy)),
-                                ),
+                                    margin: EdgeInsets.only(top: 125),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text('Score:',
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: AppTheme
+                                                    .FontFamilies.regular)),
+                                        Text(playerRightScore.toString(),
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: AppTheme
+                                                    .FontFamilies.curvy)),
+                                      ],
+                                    )),
                               ],
                             ),
-
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
                                   color: playerRightFlash
                                       ? AppTheme.AppColors.sand.withBlue(20)
                                       : AppTheme.AppColors.sand,
-                                  // color: Colors.red,
 
                                   spreadRadius: playerRightFlash ? 10 : 5,
                                   offset: Offset(
-                                      0.0,
+                                     playerRightFlash ? 5.0 : -5.0,
                                       playerRightFlash
-                                          ? (MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              145)
-                                          : (MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              130)),
+                                          ? (MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.17)
+                                          : (MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.155)),
                                   blurRadius: playerRightFlash ? 40.0 : 25.0,
                                 )
                               ],

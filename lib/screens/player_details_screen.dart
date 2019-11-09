@@ -7,7 +7,6 @@ import '../store/player_bio_model.dart';
 
 import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
-
 class PlayerDetails extends StatefulWidget {
   final int seasonCounter;
 

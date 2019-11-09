@@ -43,6 +43,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                         hintText: 'Enter your first name',
                         labelText: 'First Name'),
                     validator: (firstNameValue) {
+                      if(firstNameValue.length > 10){
+                        return 'Exceeded maximum length';
+                      }
                       if (firstNameValue.isEmpty) {
                         return 'Please enter some text';
                       }
@@ -64,6 +67,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                     validator: (lastNameValue) {
                       if (lastNameValue.isEmpty) {
                         return 'Please enter your last name';
+                      }
+                      if(lastNameValue.length > 15){
+                        return 'Exceeded maximum length';
                       }
                       return null;
                     },
