@@ -12,6 +12,8 @@ import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
 import '../widgets/action_button.dart';
 import '../helpers/pull_refresh.dart';
+import '../store/auth_model.dart';
+
 
 import '../theme/theme.dart' as AppTheme;
 
@@ -33,8 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     final totalPlayers = ScopedModel.of<PlayerBioModel>(context).getPlayers;
-    // print(totalPlayers);
-    // print('totalPlayers.......');
+    final userToken = ScopedModel.of<AuthModel>(context).userToken;
+
+    ScopedModel.of<PlayerBioModel>(context).saveUserToken(userToken);
+    
+    final tokenModel = ScopedModel.of<PlayerBioModel>(context).getUserToken;
+
     if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
         loadingPlayers = true;
@@ -149,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
           break;
       }
     }
-
     return Scaffold(
       appBar: GradientAppBar(gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),

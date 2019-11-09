@@ -3,6 +3,7 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/tournament_info.dart';
 import 'package:tournament_app/screens/auth_screen.dart';
+import 'package:tournament_app/store/auth_model.dart';
 import './store/player_bio_model.dart';
 import './store/tournament_info_model.dart';
 import 'package:flutter/services.dart';
@@ -24,21 +25,29 @@ class MyApp extends StatelessWidget {
       model: PlayerBioModel(),
       child: ScopedModel<TournamentInfoModel>(
         model: TournamentInfoModel(),
+        child: ScopedModel<AuthModel>(
+          model: AuthModel(),
         child: MaterialApp(
           home: Container(
               color: Colors.white,
-              child: SplashScreen.navigate(
+              child: ScopedModelDescendant<AuthModel>(
+              builder: (context, child, model) {
+                final isAuth = model.isAuthenticated;
+                print(isAuth);
+                print('isAuth ?????????');
+                return SplashScreen.navigate(
                 name: 'assets/animations/intro_anim.flr',
-                next: AuthScreen(),
+                next: model.isAuthenticated ? HomeScreen() : AuthScreen(),
                 until: () => Future.delayed(Duration(milliseconds: 5500)),
                 startAnimation: 'splash',
                 backgroundColor: Color(0xfffcfcfc),
-              )),
+              );})),
           theme: ThemeData(
             primarySwatch: Colors.orange,
           ),
         ),
       ),
+      )
     );
   }
 }

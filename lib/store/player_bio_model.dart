@@ -8,104 +8,26 @@ import 'package:logger/logger.dart';
 
 class PlayerBioModel extends Model {
   List<PlayerBio> _playerBio = [
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Sean Moghadam',
-    //   points: 0,
-    //   id: '0',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': ['Season 5'],
-    //     'season': ['Season 2'],
-    //   },
-    // ),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Simon Auer',
-    //   points: 0,
-    //   id: '1',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': [],
-    //   },
-    // ),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Thomas Venturini',
-    //   points: 0,
-    //   id: '2',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': ['Season 1'],
-    //   },
-    // ),
-    // PlayerBio(
-    //     date: DateTime.now(),
-    //     name: 'Stefan Metodiev',
-    //     points: 0,
-    //     id: '3',
-    //     emoji: '🏓',
-    //     achievements: {
-    //       'cup': ['Season 4'],
-    //       'season': ['Season 4'],
-    //     }),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Oleksandr Burlakov',
-    //   points: 0,
-    //   id: '4',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': [],
-    //   },
-    // ),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Niq Bernardowitsch',
-    //   points: 0,
-    //   id: '5',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': [],
-    //   },
-    // ),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Carina Weinstabl',
-    //   points: 0,
-    //   id: '6',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': ['Season 3'],
-    //   },
-    // ),
-    // PlayerBio(
-    //   date: DateTime.now(),
-    //   name: 'Johanna JoJo',
-    //   points: 0,
-    //   id: '7',
-    //   emoji: '🏓',
-    //   achievements: {
-    //     'cup': [],
-    //     'season': ['Season 3'],
-    //   },
-    // ),
   ];
 
   var logger = Logger(printer: PrettyPrinter(colors: true,));
-
 
   int _selected;
 
   bool reminderAccepted;
 
+  String userToken;
+
   bool reminderAccepter(bool status){
     return reminderAccepted = status;
+  }
+
+  void saveUserToken(String token) {
+    userToken = token;
+  }
+
+  String get getUserToken {
+    return userToken;
   }
 
 
@@ -115,12 +37,10 @@ class PlayerBioModel extends Model {
 
     Future<void> fetchPlayers(){
 
-    const url = 'https://slammers-7bbd0.firebaseio.com/players.json';
+    final url = 'https://slammers-7bbd0.firebaseio.com/players.json?auth=$userToken';
     final List<PlayerBio> playersList = [];
     return http.get(url).then((response){
       final result = json.decode(response.body) as Map<String , dynamic>;
-      print(result);
-      print('result');
       if(result != null && result.length > 0){
       result.forEach((key , val){
         playersList.add(PlayerBio(
@@ -151,7 +71,10 @@ class PlayerBioModel extends Model {
     final first = playerInfo['firstName'];
     final last = playerInfo['lastName'];
 
-    const url = 'https://slammers-7bbd0.firebaseio.com/players.json';
+    print(userToken);
+    print('add player userToken');
+
+    final url = 'https://slammers-7bbd0.firebaseio.com/players.json?auth=$userToken';
 
     final timeCreated = DateTime.now();
 
@@ -223,7 +146,7 @@ class PlayerBioModel extends Model {
     final existingPlayerIndex = _playerBio.indexWhere((selectedPlayer) => selectedPlayer.id == id);
     final existingPlayer = _playerBio[existingPlayerIndex];
 
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
     _playerBio.removeWhere((selectedPlayer) => selectedPlayer.id == id);
     _playerBio.join(', ');
@@ -241,7 +164,7 @@ class PlayerBioModel extends Model {
 
   Future<void> changePlayerPoints(int points) {
     final playerID = selectedPlayer.id;
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
     return http.patch(url, body: json.encode(({
       "points": points
@@ -253,7 +176,7 @@ class PlayerBioModel extends Model {
 
   Future<void> changePlayerEmoji(String emoji) {
     final playerID = selectedPlayer.id;
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json';
+    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
     return http.patch(url, body: json.encode(({
       "emoji": emoji
