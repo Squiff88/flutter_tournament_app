@@ -187,5 +187,9 @@
     <orderEntry type="module" module-name="firebase_core" />
     <orderEntry type="module" module-name="device_info" />
     <orderEntry type="module" module-name="webview_flutter" />
+    <orderEntry type="module" module-name="firebase_auth" />
+    <orderEntry type="module" module-name="firebase_core" />
+    <orderEntry type="module" module-name="device_info" />
+    <orderEntry type="module" module-name="webview_flutter" />
   </component>
 </module>
