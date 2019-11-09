@@ -18,7 +18,6 @@ class PlayerDetails extends StatefulWidget {
 }
 
 class _PlayerDetailsState extends State<PlayerDetails> {
-
   bool incrementPoints = false;
   bool decrementPoints = false;
   bool loadingPlayersError = false;
@@ -52,7 +51,6 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                   },
                 ),
               ],
-
             );
           })) {
         case 'No':
@@ -90,212 +88,232 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           body: Container(
             width: double.infinity,
             padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
-
-            // color: Colors.red,
             alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Player: ',
-                              style: TextStyle(fontSize: 16),
-                            )),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          player.name,
-                          style: TextStyle(
-                              fontSize: 21,
-                              fontFamily: AppTheme.FontFamilies.regular,
-                              fontWeight: FontWeight.w600),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/details_image.jpg'),
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.bottomRight),
+            ),
+            child: Container(
+              margin: EdgeInsets.only(top: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Player: ',
+                                style: TextStyle(fontSize: 16),
+                              )),
                         ),
-                      ),
-                    ],
+                        Flexible(
+                          flex: 1,
+                          child: Text(
+                            player.name,
+                            style: TextStyle(
+                                fontSize: 21,
+                                fontFamily: AppTheme.FontFamilies.regular,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  // margin: EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        flex: 1,
-                        child: Container(
+                  Container(
+                    // margin: EdgeInsets.only(bottom: 20),
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.only(top: 10),
+                              child: Text('Avatar: ',
+                                  style: TextStyle(fontSize: 16))),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Text(
+                                player.emoji,
+                                style: TextStyle(fontSize: 45),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 2,
+                          child: Container(
                             margin: EdgeInsets.only(left: 10),
                             padding: EdgeInsets.only(top: 10),
-                            child: Text('Avatar: ',
-                                style: TextStyle(fontSize: 16))),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Container(
+                            child:
+                                Text('Score: ', style: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: Container(
                             margin: EdgeInsets.only(right: 10),
+                            padding: EdgeInsets.only(top: 3),
                             child: Text(
-                              player.emoji,
-                              style: TextStyle(fontSize: 45),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10),
-                          padding: EdgeInsets.only(top: 10),
-                          child:
-                              Text('Score: ', style: TextStyle(fontSize: 16)),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10),
-                          padding: EdgeInsets.only(top: 3),
-                          child: Text(
-                            player.points.toString(),
-                            style: TextStyle(
-                                fontFamily: 'KaushanScript-Regular',
-                                fontSize: 25),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Text('Change Score',
-                            style: TextStyle(fontSize: 16)),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            width: 30,
-                            child: FlatButton(
-                              color: Colors.transparent,
-                              onPressed: () {
-                                setState(() {
-                                  this.decrementPoints = true;
-                                });
-                                model.changePlayerPoints(player.points - 1)
-                                .catchError((error){
-                                  setState(() => this.decrementPoints = false);
-                                })
-                                .then((_){
-                                  setState(() => this.decrementPoints = false);
-                                });
-                              },
-                              padding: EdgeInsets.all(0),
-                              child: this.decrementPoints ? Center(child: CircularProgressIndicator(),) : Text(
-                                '-',
-                                style: TextStyle(
-                                    fontFamily: 'KaushanScript-Regular',
-                                    fontSize: 30),
-                              ),
+                              player.points.toString(),
+                              style: TextStyle(
+                                  fontFamily: 'KaushanScript-Regular',
+                                  fontSize: 25),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(left: 20),
-                            width: 30,
-                            child: FlatButton(
-                              color: Colors.transparent,
-                              onPressed: () {
-                                setState(() {
-                                  this.incrementPoints = true;
-                                });
-                                model.changePlayerPoints(player.points + 1)
-                                .catchError((error){
-                                  setState(() => this.incrementPoints= false);
-                                })
-                                .then((_){
-                                  setState(() => this.incrementPoints = false);
-                                });
-                              },
-                              padding: EdgeInsets.all(0),
-                              child: this.incrementPoints ? Center(child: CircularProgressIndicator(),) : Text(
-                                '+',
-                                style: TextStyle(
-                                    fontFamily: 'KaushanScript-Regular',
-                                    fontSize: 30),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child:
-                          Text('Delete Player', style: TextStyle(fontSize: 16)),
+                        ),
+                      ],
                     ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 2,
-                      child: IconButton(
-                        color: AppTheme.AppColors.fire,
-                        padding: EdgeInsets.only(left: 10),
-                        alignment: Alignment.centerRight,
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          final result = deleteDialog();
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text('Change Score',
+                              style: TextStyle(fontSize: 16)),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              child: FlatButton(
+                                color: Colors.transparent,
+                                onPressed: () {
+                                  setState(() {
+                                    this.decrementPoints = true;
+                                  });
+                                  model
+                                      .changePlayerPoints(player.points - 1)
+                                      .catchError((error) {
+                                    setState(
+                                        () => this.decrementPoints = false);
+                                  }).then((_) {
+                                    setState(
+                                        () => this.decrementPoints = false);
+                                  });
+                                },
+                                padding: EdgeInsets.all(0),
+                                child: this.decrementPoints
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : Text(
+                                        '-',
+                                        style: TextStyle(
+                                            fontFamily: 'KaushanScript-Regular',
+                                            fontSize: 30),
+                                      ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 20),
+                              width: 30,
+                              child: FlatButton(
+                                color: Colors.transparent,
+                                onPressed: () {
+                                  setState(() {
+                                    this.incrementPoints = true;
+                                  });
+                                  model
+                                      .changePlayerPoints(player.points + 1)
+                                      .catchError((error) {
+                                    setState(
+                                        () => this.incrementPoints = false);
+                                  }).then((_) {
+                                    setState(
+                                        () => this.incrementPoints = false);
+                                  });
+                                },
+                                padding: EdgeInsets.all(0),
+                                child: this.incrementPoints
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : Text(
+                                        '+',
+                                        style: TextStyle(
+                                            fontFamily: 'KaushanScript-Regular',
+                                            fontSize: 30),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text('Delete Player',
+                              style: TextStyle(fontSize: 16)),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 2,
+                          child: IconButton(
+                            color: AppTheme.AppColors.fire,
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.centerRight,
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              final result = deleteDialog();
 
-                          final selectedPlayer = ScopedModel.of<PlayerBioModel>(
-                                  context,
-                                  rebuildOnChange: true)
-                              .selectedPlayer;
-                          final String playerId = selectedPlayer.id;
+                              final selectedPlayer =
+                                  ScopedModel.of<PlayerBioModel>(context,
+                                          rebuildOnChange: true)
+                                      .selectedPlayer;
+                              final String playerId = selectedPlayer.id;
 
-                          result.then((onValue) {
-                            if (onValue == 'Yes') {
-                              ScopedModel.of<PlayerBioModel>(context,
-                                      rebuildOnChange: true)
-                                  .deletePlayer(playerId);
-                              Navigator.of(context).pop();
-                            }
-                          }).catchError((error){
-                            print(error);
-                            print('deleting player error');
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                Image.asset(
-                  'assets/images/details_image.jpg',
-                  fit: BoxFit.scaleDown,
-                  width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height * 0.3,
-                ),
-              ],
+                              result.then((onValue) {
+                                if (onValue == 'Yes') {
+                                  ScopedModel.of<PlayerBioModel>(context,
+                                          rebuildOnChange: true)
+                                      .deletePlayer(playerId);
+                                  Navigator.of(context).pop();
+                                }
+                              }).catchError((error) {
+                                print(error);
+                                print('deleting player error');
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

@@ -4,24 +4,7 @@
             "outputFile": "/Users/admin/Desktop/Flutter/Course_App/flutter_tournament_app/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-ar/values-ar.xml",
             "map": [
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/76be2e692fa02dd9f0512035d470dc27/res/values-ar/values-ar.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2690",
-                        "endColumns": "100",
-                        "endOffsets": "2786"
-                    }
-                },
-                {
-                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/301df1ad7be18db594a165abef40973c/res/values-ar/values.xml",
+                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/08a1f2b4115b545a85a91cb20c76e119/jetified-play-services-base-16.0.1/res/values-ar/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/828f26247a939068541f05ab6178ae9e/res/values-ar/values.xml",
+                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/2b17962cc590b95d2b35af50cec29cb0/jetified-play-services-basement-16.2.0/res/values-ar/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -52,6 +35,23 @@
                         "startOffsets": "1217",
                         "endColumns": "188",
                         "endOffsets": "1401"
+                    }
+                },
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-2/files-2.1/ec609e8cee787e2dff3592c66b08a66a/core-1.0.0/res/values-ar/values-ar.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2690",
+                        "endColumns": "100",
+                        "endOffsets": "2786"
                     }
                 }
             ]

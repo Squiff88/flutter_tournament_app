@@ -35,6 +35,7 @@ def parse_KV_file(file, separator='=')
   return pods_ary
 end
 
+
 target 'Runner' do
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
@@ -43,6 +44,14 @@ target 'Runner' do
 
   # Flutter Pods
   generated_xcode_build_settings = parse_KV_file('./Flutter/Generated.xcconfig')
+
+    # Pods for PodTest
+    pod 'Fabric', '~> 1.10.2'
+    pod 'Crashlytics', '~> 3.14.0'
+    
+    # (Recommended) Pod for Google Analytics
+    pod 'Firebase/Analytics'
+
   if generated_xcode_build_settings.empty?
     puts "Generated.xcconfig must exist. If you're running pod install manually, make sure flutter pub get is executed first."
   end
@@ -73,3 +82,6 @@ post_install do |installer|
     end
   end
 end
+
+
+
