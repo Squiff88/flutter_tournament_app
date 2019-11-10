@@ -36,10 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final totalPlayers = ScopedModel.of<PlayerBioModel>(context).getPlayers;
     final userToken = ScopedModel.of<AuthModel>(context).userToken;
+    final userId =  ScopedModel.of<AuthModel>(context).userId;
 
     ScopedModel.of<PlayerBioModel>(context).saveUserToken(userToken);
+    ScopedModel.of<PlayerBioModel>(context).saveUserId(userId);
     
-    final tokenModel = ScopedModel.of<PlayerBioModel>(context).getUserToken;
+
+    print(userToken);
+    print(userId);
+    print('tokenModel');
 
     if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
@@ -47,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       ScopedModel.of<PlayerBioModel>(context)
-          .fetchPlayers()
+          .fetchPlayers(userId)
           .catchError((error) {
             print(error);
             print('home screen error');
@@ -115,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future<String> messageDialog(message) async {
+    Future<String> messageDialog(message, userId) async {
       var popupMessage = message;
       switch (await showDialog(
           context: context,
@@ -128,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: AppTheme.FontFamilies.curvy, fontSize: 28),
               ),
               children: <Widget>[
-                MyCustomForm(),
+                MyCustomForm(userId),
                 SimpleDialogOption(
                   onPressed: () {
                     ScopedModel.of<PlayerBioModel>(context,
@@ -309,7 +314,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 fontFamily: AppTheme
                                                     .FontFamilies.regular)),
                                         onPressed: () {
-                                          messageDialog('Slam it !');
+                                          var userID =  ScopedModel.of<AuthModel>(context).userId;
+                                          print(userID);
+                                          print('userID');
+                                          messageDialog('Slam it !', userID);
                                         },
                                       ),
                                     ),

@@ -4,6 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/player_bio.dart';
 import 'package:tournament_app/widgets/season_number.dart';
 import '../store/player_bio_model.dart';
+import '../store/auth_model.dart';
+
 
 import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
@@ -286,8 +288,10 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                             alignment: Alignment.centerRight,
                             icon: Icon(Icons.delete),
                             onPressed: () {
+                              final userId =  ScopedModel.of<AuthModel>(context).userId;
+                              // print(userId);
+                              // print('delete yser id');
                               final result = deleteDialog();
-
                               final selectedPlayer =
                                   ScopedModel.of<PlayerBioModel>(context,
                                           rebuildOnChange: true)
@@ -298,7 +302,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                                 if (onValue == 'Yes') {
                                   ScopedModel.of<PlayerBioModel>(context,
                                           rebuildOnChange: true)
-                                      .deletePlayer(playerId);
+                                      .deletePlayer(playerId, userId);
                                   Navigator.of(context).pop();
                                 }
                               }).catchError((error) {

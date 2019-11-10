@@ -5,6 +5,10 @@ import '../store/player_bio_model.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
+  String userId;
+
+  MyCustomForm(this.userId);
+
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -103,7 +107,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
                         ScopedModel.of<PlayerBioModel>(context,
                                 rebuildOnChange: true)
-                            .addPlayer(playerInfo)
+                            .addPlayer(playerInfo, widget.userId)
                             .then((_) {
                           setState(() {
                             _isLoading = false;

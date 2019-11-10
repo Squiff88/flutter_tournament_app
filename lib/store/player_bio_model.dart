@@ -18,9 +18,20 @@ class PlayerBioModel extends Model {
 
   String userToken;
 
+  String userId;
+
   bool reminderAccepter(bool status){
     return reminderAccepted = status;
   }
+
+  void saveUserId(String userId) {
+    userId = userId;
+  }
+
+  String get getUserId {
+    return userId;
+  }
+
 
   void saveUserToken(String token) {
     userToken = token;
@@ -35,9 +46,16 @@ class PlayerBioModel extends Model {
     return _playerBio;
   }
 
-    Future<void> fetchPlayers(){
+    Future<void> fetchPlayers([authUserId]){
 
-    final url = 'https://slammers-7bbd0.firebaseio.com/players.json?auth=$userToken';
+    final authUserID = authUserId;
+    final reqUserId = authUserID != null ? authUserID : '';
+
+    
+    print(reqUserId);
+    print('reqUserId');
+
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$reqUserId/players.json?auth=$userToken';
     final List<PlayerBio> playersList = [];
     return http.get(url).then((response){
       final result = json.decode(response.body) as Map<String , dynamic>;
@@ -67,14 +85,14 @@ class PlayerBioModel extends Model {
 
   int get length => _playerBio.length;
 
-  Future<void> addPlayer(playerInfo) {
+  Future<void> addPlayer(playerInfo, userId) {
     final first = playerInfo['firstName'];
     final last = playerInfo['lastName'];
-
-    print(userToken);
+    print(userId);
+    // print(userToken);
     print('add player userToken');
 
-    final url = 'https://slammers-7bbd0.firebaseio.com/players.json?auth=$userToken';
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
 
     final timeCreated = DateTime.now();
 
@@ -140,13 +158,16 @@ class PlayerBioModel extends Model {
   }
 
 
-  Future<void> deletePlayer(String id) {
+  Future<void> deletePlayer(String id, String deleteUserId) {
 
     final playerID = selectedPlayer.id;
     final existingPlayerIndex = _playerBio.indexWhere((selectedPlayer) => selectedPlayer.id == id);
     final existingPlayer = _playerBio[existingPlayerIndex];
+    print(playerID);
+    print('playerID');
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$deleteUserId/players/$playerID.json?auth=$userToken';
+    // final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
 
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
     _playerBio.removeWhere((selectedPlayer) => selectedPlayer.id == id);
     _playerBio.join(', ');
