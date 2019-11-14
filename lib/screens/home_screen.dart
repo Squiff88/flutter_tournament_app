@@ -25,7 +25,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String playerId;
   int playerPoints;
-  int seasonCounter = 0;
   Timer _timer;
   bool loadingPlayers = false;
   bool loadingPlayersError = false;
@@ -40,11 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     ScopedModel.of<PlayerBioModel>(context).saveUserToken(userToken);
     ScopedModel.of<PlayerBioModel>(context).saveUserId(userId);
-    
 
-    print(userToken);
-    print(userId);
-    print('tokenModel');
+    ScopedModel.of<TournamentInfoModel>(context).saveUserToken(userToken);
+    ScopedModel.of<TournamentInfoModel>(context).saveUserId(userId);
+
+    ScopedModel.of<TournamentInfoModel>(context).seasonCounter();
+    
 
     if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
@@ -242,8 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Alignment.bottomRight,
                                                       duration: Duration(
                                                           milliseconds: 350),
-                                                      child: PlayerDetails(
-                                                          this.seasonCounter),
+                                                      child: PlayerDetails(),
                                                     ));
                                               },
                                               child: Row(
@@ -315,8 +314,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .FontFamilies.regular)),
                                         onPressed: () {
                                           var userID =  ScopedModel.of<AuthModel>(context).userId;
-                                          print(userID);
-                                          print('userID');
                                           messageDialog('Slam it !', userID);
                                         },
                                       ),

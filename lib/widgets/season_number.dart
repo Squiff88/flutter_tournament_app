@@ -18,10 +18,9 @@ class SeasonNumber extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.07,
           child: ScopedModelDescendant<TournamentInfoModel>(
             builder: (context, child, model) {
-              int seasonNum = model.getSeasonNumber + seasonCounter;
 
               return Text(
-                'Season ${seasonNum}',
+                'Season ${seasonCounter}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 33,

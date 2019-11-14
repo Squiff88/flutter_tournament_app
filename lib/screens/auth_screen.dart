@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:tournament_app/store/tournament_info_model.dart';
+import 'dart:convert';
 import 'package:tournament_app/screens/home_screen.dart';
 import '../store/auth_model.dart';
 
@@ -16,10 +17,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
-    // transformConfig.translate(-10.0);
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
@@ -74,6 +72,8 @@ class _AuthCardState extends State<AuthCard> {
     'password': '',
   };
 
+  dynamic data;
+
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
@@ -110,6 +110,7 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
         ScopedModel.of<AuthModel>(context).userSignIn(_authData['email'], _authData['password'])
         .then((res){
+
             setState(() {
               _isLoading = false;
             });

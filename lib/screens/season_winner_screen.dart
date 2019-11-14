@@ -6,32 +6,44 @@ import '../store/player_bio_model.dart';
 import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
-class SeasonWinner extends StatelessWidget {
+class SeasonWinner extends StatefulWidget {
   final String title;
   final dynamic winner;
-  final int counter;
+  final Function counter;
   final String winnerImage;
 
   SeasonWinner(
       {Key key,
       @required this.winner,
       @required this.title,
-      this.counter,
+      @required this.counter,
       @required this.winnerImage})
       : super(key: key);
 
   @override
+  _SeasonWinnerState createState() => _SeasonWinnerState();
+}
+
+class _SeasonWinnerState extends State<SeasonWinner> {
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.counter();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final int seasonNum =
-        ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true)
+        ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false)
             .getSeasonNumber;
-    final numToSeason = counter != null ? counter : null;
-    final currentSeason = numToSeason != null ? (seasonNum + counter - 1) : '';
+
 
     return Scaffold(
         appBar: GradientAppBar(
           title: Text(
-            title + ' ' + currentSeason.toString(),
+            'Season ' + seasonNum.toString(),
             style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.regular,
                 fontWeight: FontWeight.w700,
@@ -52,7 +64,7 @@ class SeasonWinner extends StatelessWidget {
           Container(
                 decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(this.winnerImage),
+                    image: NetworkImage(this.widget.winnerImage),
                     fit: BoxFit.contain,
                     alignment: Alignment.bottomRight),
               ),
@@ -60,6 +72,7 @@ class SeasonWinner extends StatelessWidget {
             margin: EdgeInsets.all(0),
             child: ScopedModelDescendant<PlayerBioModel>(
               builder: (context, child, model) {
+
                 return Container(
                   margin: EdgeInsets.only(top: 30,),
                   height: MediaQuery.of(context).size.height,
@@ -81,7 +94,7 @@ class SeasonWinner extends StatelessWidget {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 25),
-                        child: Text(winner.emoji,
+                        child: Text(widget.winner.emoji,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 50,
@@ -92,7 +105,7 @@ class SeasonWinner extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(bottom: 20),
                         child: Text(
-                          '${winner.name}',
+                          '${widget.winner.name}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 36,

@@ -42,8 +42,6 @@ class AuthModel extends Model {
       token = response['idToken'];
       userId = response['localId'];
       
-      print(userId);
-      print('auth userId');
       exprirityDate =  DateTime.now().add(Duration(seconds: int.parse(response['expiresIn'])));
       notifyListeners();
     });

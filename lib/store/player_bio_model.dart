@@ -7,10 +7,12 @@ import 'dart:convert';
 import 'package:logger/logger.dart';
 
 class PlayerBioModel extends Model {
-  List<PlayerBio> _playerBio = [
-  ];
+  List<PlayerBio> _playerBio = [];
 
-  var logger = Logger(printer: PrettyPrinter(colors: true,));
+  var logger = Logger(
+      printer: PrettyPrinter(
+    colors: true,
+  ));
 
   int _selected;
 
@@ -18,20 +20,19 @@ class PlayerBioModel extends Model {
 
   String userToken;
 
-  String userId;
+  String userID;
 
-  bool reminderAccepter(bool status){
+  bool reminderAccepter(bool status) {
     return reminderAccepted = status;
   }
 
   void saveUserId(String userId) {
-    userId = userId;
+    userID = userId;
   }
 
   String get getUserId {
-    return userId;
+    return userID;
   }
-
 
   void saveUserToken(String token) {
     userToken = token;
@@ -41,34 +42,29 @@ class PlayerBioModel extends Model {
     return userToken;
   }
 
-
-  List<PlayerBio> get getPlayers{
+  List<PlayerBio> get getPlayers {
     return _playerBio;
   }
 
-    Future<void> fetchPlayers([authUserId]){
-
+  Future<void> fetchPlayers([authUserId]) {
     final authUserID = authUserId;
     final reqUserId = authUserID != null ? authUserID : '';
 
-    
-    print(reqUserId);
-    print('reqUserId');
-
-    final url = 'https://slammers-7bbd0.firebaseio.com/users/$reqUserId/players.json?auth=$userToken';
+    final url =
+        'https://slammers-7bbd0.firebaseio.com/users/$reqUserId/players.json?auth=$userToken';
     final List<PlayerBio> playersList = [];
-    return http.get(url).then((response){
-      final result = json.decode(response.body) as Map<String , dynamic>;
-      if(result != null && result.length > 0){
-      result.forEach((key , val){
-        playersList.add(PlayerBio(
-          id: key,
-          emoji: val['emoji'],
-          name: val['name'],
-          points: val['points'],
-          date: DateTime.parse(val['date']),
-        ));
-      });
+    return http.get(url).then((response) {
+      final result = json.decode(response.body) as Map<String, dynamic>;
+      if (result != null && result.length > 0) {
+        result.forEach((key, val) {
+          playersList.add(PlayerBio(
+            id: key,
+            emoji: val['emoji'],
+            name: val['name'],
+            points: val['points'],
+            date: DateTime.parse(val['date']),
+          ));
+        });
       }
 
       _playerBio = playersList;
@@ -76,23 +72,17 @@ class PlayerBioModel extends Model {
       sortPlayers();
 
       notifyListeners();
-    
     });
   }
-
-
-  
 
   int get length => _playerBio.length;
 
   Future<void> addPlayer(playerInfo, userId) {
     final first = playerInfo['firstName'];
     final last = playerInfo['lastName'];
-    print(userId);
-    // print(userToken);
-    print('add player userToken');
 
-    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
+    final url =
+        'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
 
     final timeCreated = DateTime.now();
 
@@ -110,7 +100,7 @@ class PlayerBioModel extends Model {
         }
       }),
     )
-    .then((response) {
+        .then((response) {
       _playerBio.add(
         PlayerBio(
           date: DateTime.now(),
@@ -157,55 +147,49 @@ class PlayerBioModel extends Model {
     notifyListeners();
   }
 
-
   Future<void> deletePlayer(String id, String deleteUserId) {
-
     final playerID = selectedPlayer.id;
-    final existingPlayerIndex = _playerBio.indexWhere((selectedPlayer) => selectedPlayer.id == id);
+    final existingPlayerIndex =
+        _playerBio.indexWhere((selectedPlayer) => selectedPlayer.id == id);
     final existingPlayer = _playerBio[existingPlayerIndex];
-    print(playerID);
-    print('playerID');
-    final url = 'https://slammers-7bbd0.firebaseio.com/users/$deleteUserId/players/$playerID.json?auth=$userToken';
-    // final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
 
+    final url =
+        'https://slammers-7bbd0.firebaseio.com/users/$deleteUserId/players/$playerID.json?auth=$userToken';
 
     _playerBio.removeWhere((selectedPlayer) => selectedPlayer.id == id);
     _playerBio.join(', ');
     notifyListeners();
 
-    return http.delete(url).then((res){
-      if(res.statusCode >= 400){
+    return http.delete(url).then((res) {
+      if (res.statusCode >= 400) {
         _playerBio.insert(existingPlayerIndex, existingPlayer);
         notifyListeners();
-
       }
     });
   }
 
-
-  Future<void> changePlayerPoints(int points) {
+  Future<void> changePlayerPoints(int points, String pointsUserId) {
     final playerID = selectedPlayer.id;
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
-    return http.patch(url, body: json.encode(({
-      "points": points
-    }))).then((_){
-        selectedPlayer.points = points;
-        notifyListeners();
+    final url =
+        'https://slammers-7bbd0.firebaseio.com/users/$pointsUserId/players/$playerID.json?auth=$userToken';
+
+    return http.patch(url, body: json.encode(({"points": points}))).then((_) {
+      selectedPlayer.points = points;
+      notifyListeners();
     });
   }
 
-  Future<void> changePlayerEmoji(String emoji) {
+  Future<void> changePlayerEmoji(String emoji, String emojiUserId) {
     final playerID = selectedPlayer.id;
-    final url = 'https://slammers-7bbd0.firebaseio.com/players/$playerID.json?auth=$userToken';
 
-    return http.patch(url, body: json.encode(({
-      "emoji": emoji
-    }))).then((_){
-        selectedPlayer.emoji = emoji;
-        notifyListeners();
+    final url =
+        'https://slammers-7bbd0.firebaseio.com/users/$emojiUserId/players/$playerID.json?auth=$userToken';
+
+    return http.patch(url, body: json.encode(({"emoji": emoji}))).then((_) {
+      selectedPlayer.emoji = emoji;
+      notifyListeners();
     });
-
   }
 
   PlayerBio get selectedPlayer => _playerBio[_selected];

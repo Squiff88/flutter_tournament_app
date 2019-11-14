@@ -6,7 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import '../helpers/pull_refresh.dart';
 import '../models/player_bio.dart';
 import '../store/tournament_info_model.dart';
-
+import '../models/tournament_info.dart';
 import '../screens/season_winner_screen.dart';
 import '../store/player_bio_model.dart';
 import '../widgets/season_number.dart';
@@ -24,20 +24,31 @@ class LeagueScreen extends StatefulWidget {
 class _LeagueScreenState extends State<LeagueScreen> {
   String playerId;
   int playerPoints;
-  int seasonCounter = 0;
   bool loadingPlayers = false;
   bool loadingPlayersError = false;
+
+
+
+
+  void incrementSeason(){
+    print('incrementing');
+    ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber();
+
+  }
 
   @override
   void initState() {
     super.initState();
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
+
   }
+
 
   @override
   Widget build(BuildContext context) {
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
-
+  
+    int seasonNum =ScopedModel.of<TournamentInfoModel>(context).getSeasonNumber;
     return Scaffold(
       appBar: GradientAppBar(
           title: Text(
@@ -79,7 +90,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SeasonNumber(seasonCounter),
+                    SeasonNumber(seasonNum),
                     ScopedModelDescendant<PlayerBioModel>(
                       builder: (context, child, model) {
                         return Column(
@@ -120,8 +131,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                                                         Alignment.bottomRight,
                                                     duration: Duration(
                                                         milliseconds: 350),
-                                                    child: PlayerDetails(
-                                                        this.seasonCounter),
+                                                    child: PlayerDetails(),
                                                   ));
                                             },
                                             child: Row(
@@ -217,7 +227,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                                                 AppTheme.FontFamilies.regular)),
                                     onPressed: () {
                                       setState(() {
-                                        seasonCounter += 1;
+                                        // seasonCounter += 1;
                                       });
 
                                       final firstPlayer =
@@ -241,14 +251,14 @@ class _LeagueScreenState extends State<LeagueScreen> {
                                               winnerImage:
                                                   'https://media.giphy.com/media/5xtDarEWbFEH1JUC424/source.gif',
                                               title: 'Season',
-                                              counter: seasonCounter,
+                                              counter: incrementSeason,
                                             ),
                                           ));
 
-                                      model.setSeasonNumber(seasonCounter);
                                       ScopedModel.of<PlayerBioModel>(context,
                                               rebuildOnChange: true)
                                           .resetSeason();
+                                      ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true).setSeasonNumber();
                                     },
                                   ),
                                 ),

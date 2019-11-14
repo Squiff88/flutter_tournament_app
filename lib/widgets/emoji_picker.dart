@@ -4,6 +4,8 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/player_bio.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
+import '../store/auth_model.dart';
+
 import '../theme/theme.dart' as AppTheme;
 
 // typedef GetEmoji = void Function(String emoji);
@@ -49,8 +51,11 @@ class _AwesomeEmojiPickerState extends State<AwesomeEmojiPicker> {
                       buttonMode: ButtonMode.MATERIAL,
                       selectedCategory: Category.ANIMALS,
                       onEmojiSelected: (emoji, category) {
+                        final userId =  ScopedModel.of<AuthModel>(context).userId;
+                        print(userId);
+                        print('.......userId');
                         model.selectPlayer(widget.playerId);
-                        model.changePlayerEmoji(emoji.emoji);
+                        model.changePlayerEmoji(emoji.emoji, userId);
 
                         Navigator.pop(context);
                       },
@@ -73,8 +78,6 @@ class _AwesomeEmojiPickerState extends State<AwesomeEmojiPicker> {
   Widget build(BuildContext context) {
     return Row(
   
-      // crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         if (widget.playerName == null)
         Container(

@@ -10,9 +10,6 @@ import '../store/auth_model.dart';
 import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
 class PlayerDetails extends StatefulWidget {
-  final int seasonCounter;
-
-  PlayerDetails(this.seasonCounter);
 
   @override
   _PlayerDetailsState createState() => _PlayerDetailsState();
@@ -72,6 +69,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
     return ScopedModelDescendant<PlayerBioModel>(
       builder: (context, child, model) {
         PlayerBio player = model.selectedPlayer;
+        final userId =  ScopedModel.of<AuthModel>(context).userId;
+
 
         if (player == null) {
           return null;
@@ -210,7 +209,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                                     this.decrementPoints = true;
                                   });
                                   model
-                                      .changePlayerPoints(player.points - 1)
+                                      .changePlayerPoints(player.points - 1 , userId)
                                       .catchError((error) {
                                     setState(
                                         () => this.decrementPoints = false);
@@ -238,11 +237,13 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                               child: FlatButton(
                                 color: Colors.transparent,
                                 onPressed: () {
+                                
+
                                   setState(() {
                                     this.incrementPoints = true;
                                   });
                                   model
-                                      .changePlayerPoints(player.points + 1)
+                                      .changePlayerPoints(player.points + 1, userId)
                                       .catchError((error) {
                                     setState(
                                         () => this.incrementPoints = false);
@@ -288,9 +289,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                             alignment: Alignment.centerRight,
                             icon: Icon(Icons.delete),
                             onPressed: () {
-                              final userId =  ScopedModel.of<AuthModel>(context).userId;
-                              // print(userId);
-                              // print('delete yser id');
+                          
+
                               final result = deleteDialog();
                               final selectedPlayer =
                                   ScopedModel.of<PlayerBioModel>(context,
