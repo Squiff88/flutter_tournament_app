@@ -33,20 +33,6 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   bool showPlayers = false;
   bool startCup = false;
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    print('UPDATE DePendenciq.............. SEEEDED');
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(CupSeedScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    print('UPDATED..............');
-    super.didUpdateWidget(oldWidget);
-  }
 
   Future<String> messageDialog(message) async {
     var popupMessage = message[0];
@@ -55,7 +41,7 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
         builder: (BuildContext context) {
           return SimpleDialog(
             title: Text(
-              '${popupMessage}',
+              popupMessage.toString(),
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.slightlyCurvy,
@@ -88,18 +74,12 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   }
 
   _showReportDialog(List<PlayerBio> players) {
-
-
-    print(players);
-    print(' in dialog ...............players');
     showDialog(
         context: context,
         builder: (BuildContext context) {
           int playersLen = players.length;
           bool longList = playersLen > 8;
 
-          print(playersLen);
-          print('playersLen');
           return Container(
             // color: Colors.blue,
             height: longList ? 400 : 320,

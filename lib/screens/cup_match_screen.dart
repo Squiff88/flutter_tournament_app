@@ -8,6 +8,7 @@ import 'package:tournament_app/screens/deathmatch_screen.dart';
 import 'package:tournament_app/screens/season_winner_screen.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
 import 'dart:io';
+import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class CupMatchScreen extends StatefulWidget {
@@ -55,9 +56,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
   @override
   initState() {
     super.initState();
-    // Add listeners to this class
-
-    print('init state ........');
 
     int cupLen = widget.cupPlayers['leftSide'].length;
 
@@ -74,6 +72,11 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       });
 
     });
+  }
+
+  void incrementSeason(){
+    print('incrementing');
+    ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber('cup');
   }
 
   @override
@@ -115,14 +118,15 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                   winner: PlayerBio(
                     date: DateTime.now(),
                     name: playerBio[1],
-                    emoji: '🏓',
+                    emoji: playerBio[0],
                     achievements: {
                       'cup': ['Season 6'],
                     },
                   ),
-                  winnerImage:
-                      'https://media.giphy.com/media/l0Ex3vQtX5VX2YtAQ/giphy.gif',
+                  winnerImage: 'https://media.giphy.com/media/l0Ex3vQtX5VX2YtAQ/giphy.gif',
                   title: 'Slammer\'s Cup',
+                  counter: incrementSeason,
+                  venue: 'cup',
                 ),
                 ));
       });
@@ -232,17 +236,12 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
     bool matchPlayed(currentPlayer){
       if(winnersList.contains(currentPlayer)){
-        print('winners list playerd ...');
         return true;
       }
       if(losersList.contains(currentPlayer)){
-        print('losers list playerd ...');
-
         return true;
       }
       else {
-        print('not playerd list playerd ...');
-
         return false;
       }
     };
@@ -323,12 +322,12 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                     onTap: isMatchPlayed ? (){} : (){
 
                                       if(losersList.contains(player)){
-                                        print('alredy player loser...');
+                        
                                         return null;
                                       }
 
                                       if(winnersList.contains(player)){
-                                        print('alredy player winner...');
+                   
                                         return null;
                                       }
 

@@ -32,8 +32,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
 
   void incrementSeason(){
     print('incrementing');
-    ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber();
-
+    ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber('season');
   }
 
   @override
@@ -49,6 +48,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
   
     int seasonNum =ScopedModel.of<TournamentInfoModel>(context).getSeasonNumber;
+    String userID =ScopedModel.of<TournamentInfoModel>(context).userId;
     return Scaffold(
       appBar: GradientAppBar(
           title: Text(
@@ -62,7 +62,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
       floatingActionButton: ActionButton('league_screen'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: RefreshIndicator(
-        onRefresh: () => refreshPlayers(context).catchError((error) {
+        onRefresh: () => refreshPlayers(context, userID).catchError((error) {
           setState(() {
             loadingPlayersError = true;
             loadingPlayers = false;
@@ -74,7 +74,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
         }),
         child: this.loadingPlayersError
             ? Center(
-                child: Text('Something went wrong'),
+                child: Text('Something went wrong!'),
               )
             : Container(
                 margin: EdgeInsets.only(top: 20),
@@ -252,13 +252,14 @@ class _LeagueScreenState extends State<LeagueScreen> {
                                                   'https://media.giphy.com/media/5xtDarEWbFEH1JUC424/source.gif',
                                               title: 'Season',
                                               counter: incrementSeason,
+                                              venue : 'season'
                                             ),
                                           ));
 
                                       ScopedModel.of<PlayerBioModel>(context,
                                               rebuildOnChange: true)
                                           .resetSeason();
-                                      ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: true).setSeasonNumber();
+                                      // R
                                     },
                                   ),
                                 ),

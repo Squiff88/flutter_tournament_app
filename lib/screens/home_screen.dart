@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Timer _timer;
   bool loadingPlayers = false;
   bool loadingPlayersError = false;
+  String userID;
 
   @override
   void initState() {
@@ -43,12 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ScopedModel.of<TournamentInfoModel>(context).saveUserToken(userToken);
     ScopedModel.of<TournamentInfoModel>(context).saveUserId(userId);
 
-    ScopedModel.of<TournamentInfoModel>(context).seasonCounter();
+    ScopedModel.of<TournamentInfoModel>(context).seasonCounter('season');
+    ScopedModel.of<TournamentInfoModel>(context).seasonCounter('cup');
     
 
     if (totalPlayers == null || totalPlayers.length < 1) {
       setState(() {
         loadingPlayers = true;
+        userID = userId;
       });
 
       ScopedModel.of<PlayerBioModel>(context)
@@ -174,9 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.bottomRight),
         ),
         child: RefreshIndicator(
-          onRefresh: () => refreshPlayers(context).catchError((error) {
+          onRefresh: () => refreshPlayers(context, this.userID).catchError((error) {
             print(error);
-            print('home screen redresh error');
+            print('refreshing error');
             setState(() {
               loadingPlayersError = true;
               loadingPlayers = false;

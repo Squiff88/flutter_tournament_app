@@ -4,7 +4,8 @@ import '../store/player_bio_model.dart';
 
   
   
-  Future<void> refreshPlayers(BuildContext ctx) async {
-  
-    await ScopedModel.of<PlayerBioModel>(ctx).fetchPlayers();
+  Future<void> refreshPlayers(BuildContext ctx, String userId) async {
+  print(userId);
+  print('userId refresh method');
+    await ScopedModel.of<PlayerBioModel>(ctx).fetchPlayers(userId);
   }

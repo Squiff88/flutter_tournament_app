@@ -17,15 +17,10 @@ class TournamentInfoModel extends Model {
 
   void saveUserId(String userAuthId) {
     userId = userAuthId;
-    print(userId);
-    print('userId tournament');
-
   }
 
   void saveUserToken(String userAuthToken) {
     userToken = userAuthToken;
-    print(userToken);
-    print('userToken tournament');
   }
 
   var _tournamentInfo = TournamentInfo(
@@ -33,16 +28,14 @@ class TournamentInfoModel extends Model {
       cupNumber: 1,
    );
 
-  Future<void> seasonCounter() {
-    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/tournaments/season.json?auth=$userToken';
+  Future<void> seasonCounter(String venueType) {
+    String venue = venueType == 'season' ? 'season' : 'cup';
+
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/tournaments/$venue.json?auth=$userToken';
     return http.get(url).then((response) {
       final result = json.decode(response.body) as Map<String, dynamic>;
-      print(result['season']);
-      print('_______________________');
-      _tournamentInfo.seasonNumber = result['season'];
+      venue == 'season' ? _tournamentInfo.seasonNumber = result['season'] : _tournamentInfo.cupNumber = result['cup'];      
       notifyListeners();
-      print(_tournamentInfo.seasonNumber);
-      print("_tournamentInfo.seasonNumber");
     }).then((_){
       return;
     }).catchError((err){
@@ -52,18 +45,20 @@ class TournamentInfoModel extends Model {
 
 
 
+  Future<void> setSeasonNumber(String venueType){
 
-
-  Future<void> setSeasonNumber(){
-    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/tournaments/season.json?auth=$userToken';
+    String venue = venueType == 'season' ? 'season' : 'cup';
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userId/tournaments/$venue.json?auth=$userToken';
     notifyListeners();
 
-    int newSeason = _tournamentInfo.seasonNumber + 1;
+    int newSeason = venue == 'season' ? _tournamentInfo.seasonNumber + 1 : _tournamentInfo.cupNumber + 1;
+    
     return http.patch(url , body: json.encode({
-      "season" : newSeason
+      venue : newSeason
     })).then((response) {
       final result = json.decode(response.body) as Map<String, dynamic>;
-      _tournamentInfo.seasonNumber = result['season'];
+      
+      venue == 'season' ? _tournamentInfo.seasonNumber = result['season'] : _tournamentInfo.cupNumber = result['cup'];
       notifyListeners();
     });  
   }
@@ -75,11 +70,10 @@ class TournamentInfoModel extends Model {
 
 
   int get getSeasonNumber {
-    print(_tournamentInfo.seasonNumber);
-    print('_tournamentInfo.seasonNumber');
-    
     return _tournamentInfo.seasonNumber;
+  }   
+  int get getCupNumber {    
+    return _tournamentInfo.cupNumber;
   } 
-  int get cupNumber => _tournamentInfo.cupNumber;
 
 }

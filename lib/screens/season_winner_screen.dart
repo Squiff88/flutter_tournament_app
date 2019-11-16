@@ -11,13 +11,16 @@ class SeasonWinner extends StatefulWidget {
   final dynamic winner;
   final Function counter;
   final String winnerImage;
+  final String venue;
 
   SeasonWinner(
       {Key key,
       @required this.winner,
       @required this.title,
       @required this.counter,
-      @required this.winnerImage})
+      @required this.winnerImage,
+      @required this.venue,
+      })
       : super(key: key);
 
   @override
@@ -35,15 +38,15 @@ class _SeasonWinnerState extends State<SeasonWinner> {
 
   @override
   Widget build(BuildContext context) {
-    final int seasonNum =
-        ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false)
-            .getSeasonNumber;
-
+    final int seasonNum = ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false).getSeasonNumber;
+    final int cupNum = ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false).getCupNumber;
+    String seasonTitle = 'Season ' + seasonNum.toString();
+    String cupTitle = 'Cup ' + cupNum.toString();
 
     return Scaffold(
         appBar: GradientAppBar(
           title: Text(
-            'Season ' + seasonNum.toString(),
+            widget.venue == 'season' ? seasonTitle : cupTitle,
             style: TextStyle(
                 fontFamily: AppTheme.FontFamilies.regular,
                 fontWeight: FontWeight.w700,

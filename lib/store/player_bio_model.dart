@@ -46,17 +46,17 @@ class PlayerBioModel extends Model {
     return _playerBio;
   }
 
-  Future<void> fetchPlayers([authUserId]) {
-    final authUserID = authUserId;
-    final reqUserId = authUserID != null ? authUserID : '';
+  Future<void> fetchPlayers(authUserId) {
 
-    final url =
-        'https://slammers-7bbd0.firebaseio.com/users/$reqUserId/players.json?auth=$userToken';
+    final reqUserId = authUserId != null ? authUserId : '';
+
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$reqUserId/players.json?auth=$userToken';
     final List<PlayerBio> playersList = [];
     return http.get(url).then((response) {
       final result = json.decode(response.body) as Map<String, dynamic>;
       if (result != null && result.length > 0) {
         result.forEach((key, val) {
+
           playersList.add(PlayerBio(
             id: key,
             emoji: val['emoji'],
