@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:tournament_app/screens/hall_of_fame.dart';
 import 'package:tournament_app/screens/league_screen.dart';
 import '../screens/cup_seed_screen.dart';
 import 'package:unicorndial/unicorndial.dart';
@@ -22,7 +23,7 @@ class _ActionButtonState extends State<ActionButton> {
   var rng = new Random();
   @override
   Widget build(BuildContext context) {
-    if (floatingButtons.length < 3) {
+    if (floatingButtons.length < 4) {
       floatingButtons.add(UnicornButton(
         hasLabel: true,
         labelText: "League Standings",
@@ -87,6 +88,28 @@ class _ActionButtonState extends State<ActionButton> {
                     alignment: Alignment.bottomRight,
                     duration: Duration(milliseconds: 350),
                     child: HomeScreen(),
+                  ));
+            }),
+      ));
+
+      floatingButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: "Hall of Fame",
+        currentButton: FloatingActionButton(
+            heroTag:
+                'Hall of Fame ${rng.nextInt(100 - 1)} + ${widget.heroTagAddition} + ${DateTime.now()}',
+            backgroundColor: Color(0xFFefbc87),
+            mini: true,
+            child: Icon(Icons.nature_people),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRightWithFade,
+                    curve: Curves.easeInOutSine,
+                    alignment: Alignment.bottomRight,
+                    duration: Duration(milliseconds: 350),
+                    child: HallOfFame(),
                   ));
             }),
       ));

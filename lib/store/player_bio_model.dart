@@ -63,6 +63,10 @@ class PlayerBioModel extends Model {
             name: val['name'],
             points: val['points'],
             date: DateTime.parse(val['date']),
+            achievements: {
+              'cup' : val['achievements']['cup'] != null ? [...val['achievements']['cup']] : [],
+              'season' : val['achievements']['season'] != null ? [...val['achievements']['season']] : [],
+            }
           ));
         });
       }
@@ -95,8 +99,8 @@ class PlayerBioModel extends Model {
         "points": 0,
         "emoji": '🏓',
         "achievements": {
-          'cup': [],
-          'season': [],
+          'cup': ['0'],
+          'season': ['0'],
         }
       }),
     )
@@ -109,8 +113,8 @@ class PlayerBioModel extends Model {
           id: json.decode(response.body)['name'],
           emoji: '🏓',
           achievements: {
-            'cup': [],
-            'season': [],
+            'cup': ['0'],
+            'season': ['0'],
           },
         ),
       );
@@ -192,5 +196,68 @@ class PlayerBioModel extends Model {
     });
   }
 
+  Future<void> setAchievement(String venue , String userID, int cupNum, String playerID) {
+
+    
+    List<Map<String, dynamic>> playerAchievements = _playerBio.map((player){
+      print(player.id);
+      print(playerID);
+      print('do they matcg playerID ? ');
+      if(player.id == playerID){
+        print('actually here');
+        print(player.achievements);
+        return player.achievements;
+      }
+      return null;
+    }).toList();
+
+    print(playerAchievements);
+    print('playerAchievements');
+
+    Map<String, List> playerAchievementsList = playerAchievements.where((achievement) => achievement != null).toList()[0];
+
+    print(playerAchievementsList);
+    Map<String, List> achievements = {
+      "cup" : playerAchievementsList['cup'] != null ? playerAchievementsList['cup'] : ['0'],
+      "season" : playerAchievementsList['season'] != null ? playerAchievementsList['season'] : ['0'],
+    };
+
+    achievements[venue].add(cupNum.toString());
+
+    final url = 'https://slammers-7bbd0.firebaseio.com/users/$userID/players/$playerID.json?auth=$userToken';
+    return http.patch(url , body: json.encode({
+         "achievements" :  achievements
+    })).then((res){
+            print('res from setting achievements');
+            _playerBio.firstWhere((player){
+              if(player.id == playerID){
+                player.achievements[venue].add(cupNum.toString());
+                notifyListeners();
+              }
+            });
+    }).catchError((err){
+      print(err);
+      print('setting achievements err');
+    });
+  }
+
   PlayerBio get selectedPlayer => _playerBio[_selected];
+
+  String findPlayerByName(String name){
+    print(name);
+    var normalizeName = name.split('\n').join(' ');
+    print(normalizeName);
+    print('normalizeName');
+    return _playerBio.map((player){
+      print(player.name);
+      print(normalizeName);
+      print('geting player');
+      if(player.name == normalizeName){
+        print('actually here');
+        print(player.id);
+        return player.id;
+      }
+      return '';
+    }).toList().toString();
+  }
 }

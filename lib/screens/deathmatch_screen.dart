@@ -23,7 +23,7 @@ class DeathMatchScreen extends StatefulWidget {
   final Map<String, List> _cupPlayers;
   final int _playerIndex;
   final _getWinner;
-
+  
   DeathMatchScreen(this._cupPlayers, this._deatchMatchPlayer, this._playerIndex,
       this._getWinner);
   @override

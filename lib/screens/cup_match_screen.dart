@@ -41,6 +41,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
   bool newRound = false;
   bool winner = false;
+  String cupWinnerId;
 
   String matchWinner = '';
 
@@ -75,7 +76,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
   }
 
   void incrementSeason(){
-    print('incrementing');
     ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber('cup');
   }
 
@@ -106,7 +106,12 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
     void routeToWinner() {
       var playerBio = winnersList[0].split(' ');
 
+    String userID = ScopedModel.of<PlayerBioModel>(context).getUserId;
+    int cupNum = ScopedModel.of<TournamentInfoModel>(context).getCupNumber;
+
       _timer = new Timer(const Duration(milliseconds: 400), () {
+
+        ScopedModel.of<PlayerBioModel>(context).setAchievement('cup' ,userID , cupNum, cupWinnerId);
         Navigator.push(
             context,
             PageTransition(
@@ -119,9 +124,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                     date: DateTime.now(),
                     name: playerBio[1],
                     emoji: playerBio[0],
-                    achievements: {
-                      'cup': ['Season 6'],
-                    },
                   ),
                   winnerImage: 'https://media.giphy.com/media/l0Ex3vQtX5VX2YtAQ/giphy.gif',
                   title: 'Slammer\'s Cup',
@@ -192,7 +194,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
 
 
 
-    void getWinnerDelayed(info) {
+    void getWinnerDelayed(info, winnerId) {
       _timer = new Timer(const Duration(milliseconds: 100), () {
 
         var winnerName = info['winner']['name'].split('\n').join(' ');
@@ -230,8 +232,18 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       });
     }
 
-    void getWinner(matchInfo) {
-      getWinnerDelayed(matchInfo);
+    void getWinner(matchInfo, winnerId) {
+      getWinnerDelayed(matchInfo, winnerId);
+
+      String winnerName = matchInfo['winner']['name'];
+      var getIdFromName = ScopedModel.of<PlayerBioModel>(context).findPlayerByName(winnerName);
+      var getId1 = getIdFromName.replaceAll('[', '');
+      var getId2 = getId1.replaceAll(']', '');
+      var getId3 = getId2.replaceAll(',', '');
+      var getId4 = getId3.replaceAll(' ', '');
+
+
+      cupWinnerId = getId4.toString();
     }
 
     bool matchPlayed(currentPlayer){
@@ -315,19 +327,18 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                     splittedName[2].split('')[0];
 
                                 bool isMatchPlayed = matchPlayed(player);
-                                
+ 
                                 return MapEntry(
                                   index,
                                   GestureDetector(
                                     onTap: isMatchPlayed ? (){} : (){
+    
 
                                       if(losersList.contains(player)){
-                        
                                         return null;
                                       }
 
                                       if(winnersList.contains(player)){
-                   
                                         return null;
                                       }
 
@@ -342,7 +353,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                                   widget.cupPlayers,
                                                   player,
                                                   index,
-                                                  getWinner),
+                                                  getWinner,
+                                                  ),
                                               ));
                                     },
                                     child: Container(
@@ -409,7 +421,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                                   widget.cupPlayers,
                                                   player,
                                                   index,
-                                                  getWinner),
+                                                  getWinner,
+                                                  ),
                                               ),
                                         );
                                       },
@@ -471,7 +484,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
                                                       widget.cupPlayers,
                                                       player,
                                                       index,
-                                                      getWinner),
+                                                      getWinner,
+                                                    ),
                                                   ));
                                         },
                                         child: Container(
