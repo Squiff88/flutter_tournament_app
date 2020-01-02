@@ -4,7 +4,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.deviceinfo.DeviceInfoPlugin;
 import io.flutter.plugins.firebaseauth.FirebaseAuthPlugin;
 import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
-import io.flutter.plugins.webviewflutter.WebViewFlutterPlugin;
+import io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -17,7 +17,7 @@ public final class GeneratedPluginRegistrant {
     DeviceInfoPlugin.registerWith(registry.registrarFor("io.flutter.plugins.deviceinfo.DeviceInfoPlugin"));
     FirebaseAuthPlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebaseauth.FirebaseAuthPlugin"));
     FirebaseCorePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.core.FirebaseCorePlugin"));
-    WebViewFlutterPlugin.registerWith(registry.registrarFor("io.flutter.plugins.webviewflutter.WebViewFlutterPlugin"));
+    FlutterNativeWebPlugin.registerWith(registry.registrarFor("io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

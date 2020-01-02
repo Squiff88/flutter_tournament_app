@@ -54,6 +54,8 @@ PODS:
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
   - Flutter (1.0.0)
+  - flutter_native_web (0.0.1):
+    - Flutter
   - GoogleAppMeasurement (6.1.5):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -88,8 +90,6 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - webview_flutter (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Crashlytics (~> 3.14.0)
@@ -99,7 +99,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - flutter_native_web (from `.symlinks/plugins/flutter_native_web/ios`)
 
 SPEC REPOS:
   trunk:
@@ -129,8 +129,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  flutter_native_web:
+    :path: ".symlinks/plugins/flutter_native_web/ios"
 
 SPEC CHECKSUMS:
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
@@ -147,14 +147,14 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnosticsInterop: e9b1b023157e3a2fc6418b5cb601e79b9af7b3a0
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_native_web: 50594dd3390e9fcbc95156af7c9718df60b462cc
   GoogleAppMeasurement: 037f46d1d8ae8b312720f1042585ab961a1289e3
   GoogleDataTransport: 166f9b9f82cbf60a204e8fe2daa9db3e3ec1fb15
   GoogleDataTransportCCTSupport: f6ab1962e9dc05ab1fb938b795e5b310209edeec
   GoogleUtilities: f895fde57977df4e0233edda0dbeac490e3703b6
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
 
 PODFILE CHECKSUM: 6037788184a7e27d836614e768d72d0782739481
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.8.4

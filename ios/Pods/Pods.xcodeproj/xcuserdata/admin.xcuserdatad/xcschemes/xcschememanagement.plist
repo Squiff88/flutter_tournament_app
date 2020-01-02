@@ -104,12 +104,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>nanopb.xcscheme</key>
+		<key>flutter_native_web.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>webview_flutter.xcscheme</key>
+		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

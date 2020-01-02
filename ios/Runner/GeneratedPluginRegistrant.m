@@ -6,7 +6,7 @@
 #import <device_info/DeviceInfoPlugin.h>
 #import <firebase_auth/FirebaseAuthPlugin.h>
 #import <firebase_core/FirebaseCorePlugin.h>
-#import <webview_flutter/WebViewFlutterPlugin.h>
+#import <flutter_native_web/FlutterNativeWebPlugin.h>
 
 @implementation GeneratedPluginRegistrant
 
@@ -14,7 +14,7 @@
   [FLTDeviceInfoPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTDeviceInfoPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
-  [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
+  [FlutterNativeWebPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeWebPlugin"]];
 }
 
 @end
