@@ -110,7 +110,6 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
     int cupNum = ScopedModel.of<TournamentInfoModel>(context).getCupNumber;
 
       _timer = new Timer(const Duration(milliseconds: 400), () {
-
         ScopedModel.of<PlayerBioModel>(context).setAchievement('cup' ,userID , cupNum, cupWinnerId);
         Navigator.push(
             context,
@@ -232,8 +231,7 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       });
     }
 
-    void getWinner(matchInfo, winnerId) {
-      getWinnerDelayed(matchInfo, winnerId);
+    void getWinner(matchInfo) {
 
       String winnerName = matchInfo['winner']['name'];
       var getIdFromName = ScopedModel.of<PlayerBioModel>(context).findPlayerByName(winnerName);
@@ -242,8 +240,8 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       var getId3 = getId2.replaceAll(',', '');
       var getId4 = getId3.replaceAll(' ', '');
 
-
       cupWinnerId = getId4.toString();
+      getWinnerDelayed(matchInfo , cupWinnerId);
     }
 
     bool matchPlayed(currentPlayer){
