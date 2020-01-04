@@ -51,11 +51,10 @@ Map<String ,List<String>> cupDraw (playerList, [ mode ] ) {
         }
         return cupSchema;
     });
-    cupSchema['mode'].add('allVsAll');
     return cupSchema;
   }
 
-  if(mode != null && mode == 'Short'){
+  else{
       playerList.asMap().forEach((index , player) {
       int playerLen = playerList.length;
 

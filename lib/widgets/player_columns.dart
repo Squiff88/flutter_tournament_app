@@ -10,6 +10,7 @@ List<Widget> playerColumn(Map<String , List> playerColumn, side, winnersList, lo
   return playerColumn[side]
       .asMap()
       .map((index, player) {
+
         var playerLost = findPlayerInStandings(losersList, player, index);
 
         // print(playerLost);

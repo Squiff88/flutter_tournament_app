@@ -283,9 +283,9 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                               
                               });
 
-                              };
+                              }; 
 
-                              if(shuffledPlayers.length == 2 || shuffledPlayers.length == 4 || shuffledPlayers.length == 8 || shuffledPlayers.length == 16 || shuffledPlayers.length == 32 ){
+                              if(shuffledPlayers.length % 2 == 0){
                                 initCup();
                               }else{
                                 var message = 'The selected number of players should be 8 ,16 or 32 for a direct elimination cup schema. Please correct the number of selected players or choose an alternative mode';
