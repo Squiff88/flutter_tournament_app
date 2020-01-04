@@ -6,7 +6,7 @@ import '../screens/cup_seed_screen.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'dart:math';
 
-import '../helpers/hex_colors.dart';
+import '../helpers/functions/hex_colors.dart';
 import '../screens/home_screen.dart';
 import '../theme/theme.dart' as AppTheme;
 

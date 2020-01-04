@@ -3,7 +3,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../helpers/pull_refresh.dart';
+import '../helpers/functions/pull_refresh.dart';
 import '../models/player_bio.dart';
 import '../store/tournament_info_model.dart';
 import '../models/tournament_info.dart';
@@ -47,8 +47,8 @@ class _LeagueScreenState extends State<LeagueScreen> {
   Widget build(BuildContext context) {
     ScopedModel.of<PlayerBioModel>(context).sortPlayers();
   
-    int seasonNum =ScopedModel.of<TournamentInfoModel>(context).getSeasonNumber;
-    String userID =ScopedModel.of<TournamentInfoModel>(context).userId;
+    int seasonNum = ScopedModel.of<TournamentInfoModel>(context).getSeasonNumber;
+    String userID = ScopedModel.of<TournamentInfoModel>(context).userId;
     return Scaffold(
       appBar: GradientAppBar(
           title: Text(

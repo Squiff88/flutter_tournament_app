@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_app/helpers/hex_colors.dart';
+import '../helpers/functions/hex_colors.dart';
 
 final ThemeData AppTheme = ThemeData(
   brightness: Brightness.light,

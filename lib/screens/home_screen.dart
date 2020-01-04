@@ -11,7 +11,7 @@ import '../store/player_bio_model.dart';
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
 import '../widgets/action_button.dart';
-import '../helpers/pull_refresh.dart';
+import '../helpers/functions/pull_refresh.dart';
 import '../store/auth_model.dart';
 
 
@@ -123,6 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String userID = ScopedModel.of<TournamentInfoModel>(context).userId;
+
     Future<String> messageDialog(message, userId) async {
       var popupMessage = message;
       switch (await showDialog(
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     ScopedModel.of<PlayerBioModel>(context,
                             rebuildOnChange: true)
-                        .sortPlayers();
+                        .sortPlayersByName();
 
                     Navigator.pop(context, 'OK');
                   },
@@ -177,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.bottomRight),
         ),
         child: RefreshIndicator(
-          onRefresh: () => refreshPlayers(context, this.userID).catchError((error) {
+          onRefresh: () => refreshPlayers(context, userID).catchError((error) {
             print(error);
             print('refreshing error');
             setState(() {
@@ -185,6 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
               loadingPlayers = false;
             });
           }).then((_) {
+            ScopedModel.of<PlayerBioModel>(context).sortPlayersByName();
+
             setState(() {
               loadingPlayers = false;
             });
@@ -299,7 +303,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Container(
                                       margin: EdgeInsets.only(top: 25),
                                       alignment: Alignment.center,
-                                      // height: MediaQuery.of(context).size.height * 0.05,
                                       child: RaisedButton(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 50, vertical: 5),

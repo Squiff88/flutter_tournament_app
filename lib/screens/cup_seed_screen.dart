@@ -11,6 +11,8 @@ import '../models/player_bio.dart';
 import '../store/player_bio_model.dart';
 import '../widgets/player_selector.dart';
 import '../widgets/action_button.dart';
+import '../widgets/dialogs/message_dialog.dart';
+import '../widgets/dialogs/choose_cup_mode.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class CupSeedScreen extends StatefulWidget {
@@ -32,46 +34,8 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   Map<String, List<String>> seededPlayers;
   bool showPlayers = false;
   bool startCup = false;
+  String selectedMode;
 
-
-  Future<String> messageDialog(message) async {
-    var popupMessage = message[0];
-    switch (await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(
-              popupMessage.toString(),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontFamily: AppTheme.FontFamilies.slightlyCurvy,
-                fontSize: 24
-                ),
-              ),
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                },
-                child: Text(
-                  'OK',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: AppTheme.FontFamilies.curvy,
-                    color: AppTheme.AppColors.intenseFire
-                    ),
-                  ),
-              ),
-            ],
-          );
-        })) {
-      case 'OK':
-        return 'OK';
-        // ...
-        break;
-    }
-  }
 
   _showReportDialog(List<PlayerBio> players) {
     showDialog(
@@ -158,7 +122,8 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
   }
 
   void nextRound(players) {
-    var seedPlayer1 = cupDraw(players);
+    print('next round to come');
+    var seedPlayer1 = cupDraw(players, selectedMode);
 
     setState(() {
       seededPlayers = seedPlayer1;
@@ -301,18 +266,38 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                             alignment: Alignment.center,
                             icon: Icon(Icons.done_all),
                             onPressed: () {
-                              final newPlayes = cupDraw(shuffledPlayers);
-   
 
-                              if (newPlayes['fail'] != null && newPlayes['fail'].length > 0) {
-                                return messageDialog(newPlayes['fail']);
+                            final initCup = ([String mode]){
+
+                              final newPlayres = cupDraw(shuffledPlayers, mode);
+
+                              if (newPlayres['fail'] != null && newPlayres['fail'].length > 0) {
+                                return messageDialog(context, newPlayres['fail']);
                               }
                             
                               setState(() {
-                                seededPlayers = newPlayes;
+                                seededPlayers = newPlayres;
                                 showPlayers = false;
                                 startCup = true;
+                                selectedMode = mode;
+                              
                               });
+
+                              };
+
+                              if(shuffledPlayers.length == 2 || shuffledPlayers.length == 4 || shuffledPlayers.length == 8 || shuffledPlayers.length == 16 || shuffledPlayers.length == 32 ){
+                                initCup();
+                              }else{
+                                var message = 'The selected number of players should be 8 ,16 or 32 for a direct elimination cup schema. Please correct the number of selected players or choose an alternative mode';
+                                final chooseMode = chooseCupMode(context, message);
+                                
+                                chooseMode.then((selectedMode){
+                                  if(selectedMode != null){
+
+                                    initCup(selectedMode);
+                                  }
+                                }).catchError((err) => print(err));
+                              }
                             },
                           ),
                         ],
@@ -336,8 +321,8 @@ class _CupSeedScreenState extends State<CupSeedScreen> {
                       )),
                 if (startCup)
                   Container(
-                    margin: EdgeInsets.only(top: 30),
-                    height: MediaQuery.of(context).size.height * 0.35,
+                    margin: EdgeInsets.only(top: 28),
+                    height: MediaQuery.of(context).size.height * 0.57,
                     child: CupMatchScreen(
                       cupPlayers: seededPlayers,
                       invokeNextRound: nextRound,

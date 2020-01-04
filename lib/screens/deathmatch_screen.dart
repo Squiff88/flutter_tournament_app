@@ -10,10 +10,12 @@ import 'package:tournament_app/store/player_bio_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
 String deathMatchOponent(Map<String, List> totalPlayers, String selectedPlayer,
-    int selectedPlayerIndex) {
-  if (totalPlayers['leftSide'].contains(selectedPlayer)) {
-    return totalPlayers['rightSide'][selectedPlayerIndex];
-  } else {
+    int selectedPlayerIndex, chosenSide) {
+
+    if(chosenSide == 'leftSide'){
+      return totalPlayers['rightSide'][selectedPlayerIndex];
+    }
+   else {
     return totalPlayers['leftSide'][selectedPlayerIndex];
   }
 }
@@ -23,9 +25,10 @@ class DeathMatchScreen extends StatefulWidget {
   final Map<String, List> _cupPlayers;
   final int _playerIndex;
   final _getWinner;
+  final String _side;
   
   DeathMatchScreen(this._cupPlayers, this._deatchMatchPlayer, this._playerIndex,
-      this._getWinner);
+      this._getWinner, this._side);
   @override
   _DeathMatchScreenState createState() => _DeathMatchScreenState();
 }
@@ -58,10 +61,9 @@ class _DeathMatchScreenState extends State<DeathMatchScreen> {
   @override
   Widget build(BuildContext context) {
     final String playerOponent = deathMatchOponent(
-        widget._cupPlayers, widget._deatchMatchPlayer, widget._playerIndex);
+        widget._cupPlayers, widget._deatchMatchPlayer, widget._playerIndex, widget._side);
 
-    bool playerLeftSide =
-        widget._cupPlayers['leftSide'].contains(widget._deatchMatchPlayer);
+    bool playerLeftSide = widget._side == 'leftSide';
 
     List initPlayerLeft;
     String playerLeftName;

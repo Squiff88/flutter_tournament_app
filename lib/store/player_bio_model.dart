@@ -73,7 +73,7 @@ class PlayerBioModel extends Model {
 
       _playerBio = playersList;
 
-      sortPlayers();
+      sortPlayersByName();
 
       notifyListeners();
     });
@@ -131,6 +131,12 @@ class PlayerBioModel extends Model {
   void sortPlayers() {
     _playerBio.sort((a, b) => a.name.compareTo(b.name));
     _playerBio.sort((a, b) => b.points.compareTo(a.points));
+    // Then notify all the listeners.
+    notifyListeners();
+  }
+
+    void sortPlayersByName() {
+    _playerBio.sort((a, b) => a.name.compareTo(b.name));
 
     // Then notify all the listeners.
     notifyListeners();
@@ -200,19 +206,12 @@ class PlayerBioModel extends Model {
 
     
     List<Map<String, dynamic>> playerAchievements = _playerBio.map((player){
-      print(player.id);
-      print(playerID);
-      print('do they matcg playerID ? ');
       if(player.id == playerID){
-        print('actually here');
-        print(player.achievements);
+
         return player.achievements;
       }
       return null;
     }).toList();
-
-    print(playerAchievements);
-    print('playerAchievements');
 
     Map<String, List> playerAchievementsList = playerAchievements.where((achievement) => achievement != null).toList()[0];
 
@@ -244,17 +243,11 @@ class PlayerBioModel extends Model {
   PlayerBio get selectedPlayer => _playerBio[_selected];
 
   String findPlayerByName(String name){
-    print(name);
     var normalizeName = name.split('\n').join(' ');
-    print(normalizeName);
-    print('normalizeName');
+
     return _playerBio.map((player){
-      print(player.name);
-      print(normalizeName);
-      print('geting player');
       if(player.name == normalizeName){
-        print('actually here');
-        print(player.id);
+
         return player.id;
       }
       return '';
