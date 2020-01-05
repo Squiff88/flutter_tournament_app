@@ -5,6 +5,8 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tournament_app/widgets/add_player.dart';
+import 'package:tournament_app/widgets/dialogs/add_player_dialog.dart';
+import 'package:tournament_app/widgets/dialogs/info_reminder_dialog.dart';
 
 import '../store/tournament_info_model.dart';
 import '../store/player_bio_model.dart';
@@ -18,6 +20,10 @@ import '../store/auth_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
 class HomeScreen extends StatefulWidget {
+
+  final guestUser;
+  HomeScreen([this.guestUser]);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -33,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    print(widget.guestUser);
+    print('widget.guestUser');
     final totalPlayers = ScopedModel.of<PlayerBioModel>(context).getPlayers;
     final userToken = ScopedModel.of<AuthModel>(context).userToken;
     final userId =  ScopedModel.of<AuthModel>(context).userId;
@@ -48,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ScopedModel.of<TournamentInfoModel>(context).seasonCounter('cup');
     
 
-    if (totalPlayers == null || totalPlayers.length < 1) {
+    if (totalPlayers == null || totalPlayers.length < 1 && (widget.guestUser?.user?.isAnonymous == null)) {
       setState(() {
         loadingPlayers = true;
         userID = userId;
@@ -75,49 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final scopedReminder =
         ScopedModel.of<PlayerBioModel>(context).reminderAccepted;
 
-    Future<String> infoReminder(message) async {
-      switch (await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SimpleDialog(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/info_avatar.gif',
-                  fit: BoxFit.scaleDown,
-                  width: MediaQuery.of(context).size.width,
-                ),
-                SimpleDialogOption(
-                  onPressed: () {
-                    ScopedModel.of<PlayerBioModel>(context)
-                        .reminderAccepter(true);
 
-                    Navigator.pop(context, 'OK');
-                  },
-                  child: Text(
-                    'OK',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: AppTheme.FontFamilies.curvy,
-                        color: AppTheme.AppColors.intenseFire),
-                  ),
-                ),
-              ],
-            );
-          })) {
-        case 'OK':
-          return 'OK';
-          // ...
-          break;
-      }
-    }
 
     final acceptedReminder = scopedReminder != null ? scopedReminder : false;
 
     this._timer = acceptedReminder
         ? null
         : new Timer(const Duration(milliseconds: 2000), () {
-            infoReminder('my message');
+            infoReminder('my message', context);
           });
   }
 
@@ -125,46 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     String userID = ScopedModel.of<TournamentInfoModel>(context).userId;
 
-    Future<String> messageDialog(message, userId) async {
-      var popupMessage = message;
-      switch (await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SimpleDialog(
-              title: Text(
-                popupMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: AppTheme.FontFamilies.curvy, fontSize: 28),
-              ),
-              children: <Widget>[
-                MyCustomForm(userId),
-                SimpleDialogOption(
-                  onPressed: () {
-                    ScopedModel.of<PlayerBioModel>(context,
-                            rebuildOnChange: true)
-                        .sortPlayersByName();
-
-                    Navigator.pop(context, 'OK');
-                  },
-                  child: Text(
-                    'OK',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: AppTheme.FontFamilies.curvy,
-                        color: AppTheme.AppColors.intenseFire),
-                  ),
-                ),
-              ],
-            );
-          })) {
-        case 'OK':
-          return 'OK';
-        default:
-          break;
-      }
-    }
     return Scaffold(
       appBar: GradientAppBar(gradient: AppTheme.AppBarColor.linear),
       floatingActionButton: ActionButton('home_page'),
@@ -236,6 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
+                                                print(model.getPlayers[index].id);
+                                                print(model.getPlayers[index].name);
+                                                print(model.getPlayers[index].emoji);
+                                                print('model.getPlayers[index]');
                                                 model.selectPlayer(
                                                     model.getPlayers[index].id);
                                                 Navigator.push(
@@ -320,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .FontFamilies.regular)),
                                         onPressed: () {
                                           var userID =  ScopedModel.of<AuthModel>(context).userId;
-                                          messageDialog('Slam it !', userID);
+                                          addPlayerDialog('Slam it !', userID, context);
                                         },
                                       ),
                                     ),

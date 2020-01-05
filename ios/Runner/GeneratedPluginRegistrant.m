@@ -7,6 +7,7 @@
 #import <firebase_auth/FirebaseAuthPlugin.h>
 #import <firebase_core/FirebaseCorePlugin.h>
 #import <flutter_native_web/FlutterNativeWebPlugin.h>
+#import <local_auth/LocalAuthPlugin.h>
 
 @implementation GeneratedPluginRegistrant
 
@@ -15,6 +16,7 @@
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FlutterNativeWebPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeWebPlugin"]];
+  [FLTLocalAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTLocalAuthPlugin"]];
 }
 
 @end

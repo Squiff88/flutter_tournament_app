@@ -10,6 +10,7 @@ class AuthModel extends Model {
   String token;
   DateTime exprirityDate;
   String userId;
+  bool userAnonymous = false;
 
 
   bool get isAuthenticated {
@@ -21,6 +22,16 @@ class AuthModel extends Model {
       return token;
     }
     return null;
+  }
+
+  bool get setAnonymous{
+     userAnonymous = true;
+     notifyListeners();
+     return userAnonymous;
+  }
+
+  bool get isUserAnonymous {
+    return userAnonymous;
   }
 
 

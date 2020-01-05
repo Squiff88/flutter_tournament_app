@@ -10,6 +10,7 @@ import 'package:tournament_app/screens/deathmatch_screen.dart';
 import 'package:tournament_app/screens/season_winner_screen.dart';
 import 'package:tournament_app/store/player_bio_model.dart';
 import 'dart:io';
+import '../store/auth_model.dart';
 import '../store/tournament_info_model.dart';
 import '../theme/theme.dart' as AppTheme;
 
@@ -77,6 +78,10 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
   }
 
   void incrementSeason() {
+    bool isAnonymousUser =ScopedModel.of<AuthModel>(context).isUserAnonymous;
+    if(isAnonymousUser){
+      return null;
+    }
     ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber('cup');
   }
 
@@ -111,8 +116,18 @@ class _CupMatchScreenState extends State<CupMatchScreen> {
       int cupNum = ScopedModel.of<TournamentInfoModel>(context).getCupNumber;
 
       _timer = new Timer(const Duration(milliseconds: 400), () {
+        final userAnonymous = ScopedModel.of<AuthModel>(context).isUserAnonymous;
+        print(userAnonymous);
+        print('here userAnonymous');
+
+        if(!userAnonymous){
         ScopedModel.of<PlayerBioModel>(context)
             .setAchievement('cup', userID, cupNum, cupWinnerId);
+        }
+        print(userID);
+        print(cupNum);
+        print(cupWinnerId);
+        print('dataaa');
         Navigator.push(
             context,
             PageTransition(

@@ -194,11 +194,10 @@ class _AuthCardState extends State<AuthCard> {
     }
   }
 
-  Future<void> _guestLogin() async{
+  Future<dynamic> _guestLogin() async{
     try {
       final guestUser = await FirebaseAuth.instance.signInAnonymously();
-      print(guestUser);
-      print('guestUser');
+      return guestUser;
     } catch (e) {
       print(e);
       print('error on guest login');
@@ -294,14 +293,20 @@ class _AuthCardState extends State<AuthCard> {
                         ),
                         FlatButton(
                           child: Text('Continue as Guest'),
-                          onPressed:() => _guestLogin().then((_){
+                          onPressed:() => _guestLogin().then((userData){
+                            print(userData);
+                            print('userData');
+                            ScopedModel.of<AuthModel>(context).setAnonymous;
+                            // ScopedModel.of<AuthModel>(context).;
+
                             Navigator.of(context).push(PageTransition(
                               type: PageTransitionType.rightToLeftWithFade,
                               curve: Curves.easeInOutSine,
                               alignment: Alignment.bottomRight,
                               duration: Duration(milliseconds: 350),
-                              child: HomeScreen(),
+                              child: HomeScreen(userData),
                             )).catchError((error){
+                              print('guest login error');
                               print(error);
                             });
                           }),

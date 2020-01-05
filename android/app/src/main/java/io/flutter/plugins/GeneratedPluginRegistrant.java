@@ -5,6 +5,7 @@ import io.flutter.plugins.deviceinfo.DeviceInfoPlugin;
 import io.flutter.plugins.firebaseauth.FirebaseAuthPlugin;
 import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
 import io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin;
+import io.flutter.plugins.localauth.LocalAuthPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -18,6 +19,7 @@ public final class GeneratedPluginRegistrant {
     FirebaseAuthPlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebaseauth.FirebaseAuthPlugin"));
     FirebaseCorePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.core.FirebaseCorePlugin"));
     FlutterNativeWebPlugin.registerWith(registry.registrarFor("io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin"));
+    LocalAuthPlugin.registerWith(registry.registrarFor("io.flutter.plugins.localauth.LocalAuthPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

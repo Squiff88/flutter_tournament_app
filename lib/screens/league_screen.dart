@@ -10,6 +10,7 @@ import '../models/tournament_info.dart';
 import '../screens/season_winner_screen.dart';
 import '../store/player_bio_model.dart';
 import '../widgets/season_number.dart';
+import '../store/auth_model.dart';
 
 import '../screens/player_details_screen.dart';
 import '../widgets/emoji_picker.dart';
@@ -32,6 +33,11 @@ class _LeagueScreenState extends State<LeagueScreen> {
 
   void incrementSeason(){
     print('incrementing');
+    bool isAnonymousUser =ScopedModel.of<AuthModel>(context).isUserAnonymous;
+    if(isAnonymousUser){
+      return null;
+    }
+
     ScopedModel.of<TournamentInfoModel>(context).setSeasonNumber('season');
   }
 

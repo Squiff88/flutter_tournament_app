@@ -54,6 +54,8 @@ class _AwesomeEmojiPickerState extends State<AwesomeEmojiPicker> {
                         final userId =  ScopedModel.of<AuthModel>(context).userId;
                         print(userId);
                         print('.......userId');
+                        print(widget.playerId);
+                        print('PV7EmSnRuCe5TDKSJqhcxV7fxt32');
                         model.selectPlayer(widget.playerId);
                         model.changePlayerEmoji(emoji.emoji, userId);
 

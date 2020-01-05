@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../store/player_bio_model.dart';
-
+import '../store/auth_model.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
-  String userId;
+  final userId;
 
   MyCustomForm(this.userId);
 
@@ -104,10 +104,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                           'firstName': _first,
                           'lastName': _last
                         };
-
+                        bool isAnonymousUser =ScopedModel.of<AuthModel>(context).isUserAnonymous;
+   
                         ScopedModel.of<PlayerBioModel>(context,
                                 rebuildOnChange: true)
-                            .addPlayer(playerInfo, widget.userId)
+                            .addPlayer(playerInfo, widget.userId, isAnonymousUser)
                             .then((_) {
                           setState(() {
                             _isLoading = false;

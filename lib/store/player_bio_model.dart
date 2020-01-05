@@ -22,12 +22,16 @@ class PlayerBioModel extends Model {
 
   String userID;
 
-  bool reminderAccepter(bool status) {
-    return reminderAccepted = status;
+  void reminderAccepter(bool status) {
+    reminderAccepted = status;
+
+    notifyListeners();
   }
 
   void saveUserId(String userId) {
     userID = userId;
+
+    notifyListeners();
   }
 
   String get getUserId {
@@ -36,6 +40,8 @@ class PlayerBioModel extends Model {
 
   void saveUserToken(String token) {
     userToken = token;
+
+    notifyListeners();
   }
 
   String get getUserToken {
@@ -81,7 +87,7 @@ class PlayerBioModel extends Model {
 
   int get length => _playerBio.length;
 
-  Future<void> addPlayer(playerInfo, userId) {
+  Future<void> addPlayer(playerInfo, userId, [isUserAnonymous]) {
     final first = playerInfo['firstName'];
     final last = playerInfo['lastName'];
 
@@ -89,6 +95,8 @@ class PlayerBioModel extends Model {
         'https://slammers-7bbd0.firebaseio.com/users/$userId/players.json?auth=$userToken';
 
     final timeCreated = DateTime.now();
+    print(isUserAnonymous);
+    print('isUserAnonymous');
 
     return http
         .post(
@@ -105,12 +113,14 @@ class PlayerBioModel extends Model {
       }),
     )
         .then((response) {
+          print(json.decode(response.body));
+          print('from user response');
       _playerBio.add(
         PlayerBio(
           date: DateTime.now(),
           name: first + ' ' + last,
           points: 0,
-          id: json.decode(response.body)['name'],
+          id: isUserAnonymous ? (first + last) : json.decode(response.body)['name'],
           emoji: '🏓',
           achievements: {
             'cup': ['0'],
@@ -118,7 +128,7 @@ class PlayerBioModel extends Model {
           },
         ),
       );
-    });
+    }).catchError((err) => print('error creating player'));
   }
 
   void resetSeason() {
@@ -146,6 +156,9 @@ class PlayerBioModel extends Model {
 
   void selectPlayer(String id) {
     for (int i = 0; i < _playerBio.length; i++) {
+      print(id);
+      print(_playerBio[i].id);
+      print('_playerBio[i].id');
       if (_playerBio[i].id == id) {
         _selected = i;
         notifyListeners();
@@ -228,7 +241,9 @@ class PlayerBioModel extends Model {
          "achievements" :  achievements
     })).then((res){
             print('res from setting achievements');
+            print(playerID);
             _playerBio.firstWhere((player){
+            print(player.id);
               if(player.id == playerID){
                 player.achievements[venue].add(cupNum.toString());
                 notifyListeners();

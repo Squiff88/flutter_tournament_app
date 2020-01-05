@@ -40,8 +40,8 @@ class _SeasonWinnerState extends State<SeasonWinner> {
   Widget build(BuildContext context) {
     final int seasonNum = ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false).getSeasonNumber;
     final int cupNum = ScopedModel.of<TournamentInfoModel>(context, rebuildOnChange: false).getCupNumber;
-    String seasonTitle = 'Season ' + seasonNum.toString();
-    String cupTitle = 'Cup ' + cupNum.toString();
+    String seasonTitle = 'Season ' + (seasonNum != null  ? seasonNum.toString() : 'Winner');
+    String cupTitle = 'Cup ' + (cupNum != null  ? cupNum.toString() : 'Winner') ;
 
     return Scaffold(
         appBar: GradientAppBar(

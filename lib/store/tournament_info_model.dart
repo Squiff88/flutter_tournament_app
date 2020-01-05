@@ -1,5 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tournament_app/models/tournament_info.dart';
+import './auth_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -14,6 +15,7 @@ class TournamentInfoModel extends Model {
   String userId;
 
   String userToken;
+  
 
   void saveUserId(String userAuthId) {
     userId = userAuthId;
@@ -27,6 +29,7 @@ class TournamentInfoModel extends Model {
       seasonNumber: 1,
       cupNumber: 1,
    );
+   
 
   Future<void> seasonCounter(String venueType) {
     String venue = venueType == 'season' ? 'season' : 'cup';
